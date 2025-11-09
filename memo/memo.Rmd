@@ -73,3 +73,8 @@ Add more plot sections as needed. Each project should have at least 3 plots, but
 
 ### Plot 4: ___________ 
 
+
+Graph Ideas: 
+
+Line graph of all storms by year
+stacked line graph by storm type
