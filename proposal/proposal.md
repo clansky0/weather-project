@@ -308,3 +308,21 @@ storms|>
 ```
 
 ![](proposal_files/figure-gfm/storm_by_type-1.png)<!-- -->
+
+``` r
+storms_by_year <- storms %>%
+  count(BEGIN_YEAR, name = "n_events")
+
+ggplot(storms_by_year, aes(x = BEGIN_YEAR, y = n_events)) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2) +
+  labs(
+    title = "Frequency of Extreme Weather Events (2010–2020)",
+    subtitle = "Filtered to: Avalanche, Blizzard, Drought, Flood, Flash Flood, Excessive Heat, Tornado, Tropical Storm, Tsunami,Wildfire",
+    x = "Year",
+    y = "Number of Events"
+  ) +
+  theme_minimal()
+```
+
+![](proposal_files/figure-gfm/frequency_line_graph-1.png)<!-- -->
