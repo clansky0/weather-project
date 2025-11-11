@@ -322,7 +322,8 @@ ggplot(storms_by_year, aes(x = BEGIN_YEAR, y = n_events)) +
     x = "Year",
     y = "Number of Events"
   ) +
-  theme_minimal()
+  theme_minimal()+
+  scale_x_continuous(breaks = c(2010,2012,2014,2016,2018,2020))
 ```
 
 ![](proposal_files/figure-gfm/frequency_line_graph-1.png)<!-- -->
