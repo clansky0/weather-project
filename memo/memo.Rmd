@@ -13,11 +13,9 @@ library(broom)
 
 ## Data Clean Up Steps for Overall Data
 
-### Step 1: _________
+### Step 1: Remove all unused columns
 
-```{r}
-
-```
+**SHOULD WE COPY PASTE OUR DATA CLEANING FROM THE PROPOSAL?**
 
 ### Step 2: ________
 
