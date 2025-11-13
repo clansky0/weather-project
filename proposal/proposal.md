@@ -6,6 +6,7 @@ Team Weather- Colin, Kailor & Jennifer
 library(tidyverse)
 library(broom)
 library(lubridate)
+library(RColorBrewer)
 ```
 
 ## 1. Introduction
@@ -310,6 +311,38 @@ storms|>
 ![](proposal_files/figure-gfm/storm_by_type-1.png)<!-- -->
 
 ``` r
+storm_casualties <- storms |> 
+  rowwise(EVENT_ID)|>
+  mutate(CASUALTIES = sum(c(INJURIES_DIRECT, INJURIES_INDIRECT, DEATHS_DIRECT, DEATHS_INDIRECT)))|>
+  filter(BEGIN_YEAR == 2011)|>
+  arrange(desc(CASUALTIES))
+
+print(storm_casualties)
+```
+
+    ## # A tibble: 18,259 × 32
+    ## # Rowwise:  EVENT_ID
+    ##    BEGIN_YEAR BEGIN_MONTH BEGIN_DAY BEGIN_TIME END_YEARMONTH END_DAY END_TIME
+    ##         <int>       <int>     <dbl>      <dbl>         <dbl>   <dbl>    <dbl>
+    ##  1       2011           5        22       1640        201105      22     1700
+    ##  2       2011           4        27       1548        201104      27     1635
+    ##  3       2011           4        27       1635        201104      27     1714
+    ##  4       2011           7        21        900        201107      24     1900
+    ##  5       2011           7        17       1200        201107      31     2359
+    ##  6       2011           4        27       1934        201104      27     1956
+    ##  7       2011           6         1       1517        201106       1     1609
+    ##  8       2011           7         9       1430        201107      31     2359
+    ##  9       2011           7        17       1200        201107      31     2359
+    ## 10       2011           8         1        600        201108       6      221
+    ## # ℹ 18,249 more rows
+    ## # ℹ 25 more variables: EPISODE_ID <dbl>, EVENT_ID <dbl>, STATE <chr>,
+    ## #   MONTH_NAME <chr>, EVENT_TYPE <chr>, BEGIN_DATE_TIME <chr>,
+    ## #   CZ_TIMEZONE <chr>, END_DATE_TIME <chr>, INJURIES_DIRECT <dbl>,
+    ## #   INJURIES_INDIRECT <dbl>, DEATHS_DIRECT <dbl>, DEATHS_INDIRECT <dbl>,
+    ## #   DAMAGE_PROPERTY <chr>, DAMAGE_CROPS <chr>, SOURCE <chr>, MAGNITUDE <lgl>,
+    ## #   MAGNITUDE_TYPE <lgl>, FLOOD_CAUSE <chr>, CATEGORY <lgl>, BEGIN_LAT <dbl>, …
+
+``` r
 storms_by_year <- storms %>%
   count(BEGIN_YEAR, name = "n_events")
 
@@ -326,19 +359,21 @@ casualties_storms <- left_join(storm_casualties, storms_by_year)
 
 ``` r
 ggplot(casualties_storms, aes(BEGIN_YEAR)) +
-  geom_line(aes(y = n_events, color = "Number of storms")) +
-  geom_line(aes(y = casualties_year, color = "Casualties"))+
-  geom_point(aes(y = n_events, color = "Number of storms"), size = 2) +
-  geom_point(aes(y = casualties_year, color = "Casualties"), size = 2)+
-  #geom_point(size = 2) +
+  geom_line(aes(y = n_events, color = "orange")) +
+  geom_line(aes(y = casualties_year, color = "red"))+
+  geom_point(aes(y = n_events, color = "orange")) +
+  geom_point(aes(y = casualties_year, color = "red"))+
   labs(
     title = "Frequency of Extreme Weather Events (2010–2020)",
-    subtitle = "Filtered to: Avalanche, Blizzard, Drought, Flood, Flash Flood, Excessive Heat, Tornado, Tropical Storm, Tsunami,Wildfire",
+    subtitle = "Filtered to major natural disasters",
     x = "Year",
     y = "Number of Events",
     color = ""
   ) +
   theme_minimal()+
+  scale_color_manual(
+    values = c("orange" = "black", "red" = "red"),
+    labels = c("orange" = "# of storms", "red" = "Injures + Fatalities"))+
   scale_x_continuous(breaks = c(2010,2012,2014,2016,2018,2020))
 ```
 
@@ -353,7 +388,7 @@ ggplot(storms_by_year, aes(x = BEGIN_YEAR, y = n_events)) +
   geom_point(size = 2) +
   labs(
     title = "Frequency of Extreme Weather Events (2010–2020)",
-    subtitle = "Filtered to: Avalanche, Blizzard, Drought, Flood, Flash Flood, Excessive Heat, Tornado, Tropical Storm, Tsunami,Wildfire",
+    subtitle = "Filtered to major natural disasters",
     x = "Year",
     y = "Number of Events"
   ) +
@@ -361,4 +396,12 @@ ggplot(storms_by_year, aes(x = BEGIN_YEAR, y = n_events)) +
   scale_x_continuous(breaks = c(2010,2012,2014,2016,2018,2020))
 ```
 
-![](proposal_files/figure-gfm/old_graph-1.png)<!-- --> \`\`\`
+![](proposal_files/figure-gfm/old_graph-1.png)<!-- -->
+
+``` r
+ggsave("storms_by_year.png")
+```
+
+    ## Saving 7 x 5 in image
+
+\`\`\`
