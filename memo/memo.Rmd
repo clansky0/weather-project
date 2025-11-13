@@ -121,5 +121,7 @@ Add more plot sections as needed. Each project should have at least 3 plots, but
 
 Graph Ideas: 
 
-Line graph of all storms by year
 stacked line graph by storm type
+Map of most common storms by area
+Add injuries/fatalaties + damages to graph
+annotations about major events like el nino
