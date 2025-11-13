@@ -28,15 +28,8 @@ library(RColorBrewer)
 storms <- read_csv("../data/storms.csv")
 ```
 
-    ## Rows: 143621 Columns: 29
-    ## ── Column specification ────────────────────────────────────────────────────────
-    ## Delimiter: ","
-    ## chr (10): STATE, MONTH_NAME, EVENT_TYPE, BEGIN_DATE_TIME, CZ_TIMEZONE, END_D...
-    ## dbl (16): BEGIN_YEARMONTH, BEGIN_DAY, BEGIN_TIME, END_YEARMONTH, END_DAY, EN...
-    ## lgl  (3): MAGNITUDE, MAGNITUDE_TYPE, CATEGORY
-    ## 
-    ## ℹ Use `spec()` to retrieve the full column specification for this data.
-    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+To put the dates in a more usable format, we split up the format from
+year month into two columns, year and month.
 
 ``` r
 storms <- storms|>
@@ -48,16 +41,17 @@ storms <- storms|>
   )
 ```
 
+We also change the date format into one that can be graphed with ggplot
+without any gaps.
+
 ``` r
 storms <- storms|>
   mutate(BEGIN_DATE = as_date(BEGIN_DATE_TIME))
-
-view(storms)
 ```
 
 ## Plots
 
-### Plot 1: \_\_\_\_\_\_\_\_\_
+### Plot 1: Frequency of storms by year
 
 #### Data cleanup steps specific to plot 1
 
@@ -85,15 +79,13 @@ ggplot(storms_by_year, aes(x = BEGIN_YEAR, y = n_events)) +
   scale_x_continuous(breaks = c(2010,2012,2014,2016,2018,2020))
 ```
 
-![](memo_files/figure-gfm/storms_by_year-1.png)<!-- -->
+<img src="memo_files/figure-gfm/storms_by_year-1.png" alt="A line graph showing the frequency of extreme weather events from 2010-2020. There is a peak at over 18,000 in 2011 and 15,000 in 2018, with no strong trend between other years."  />
 
 ``` r
-ggsave("storms_by_year.png")
+#ggsave("storms_by_year.png")
 ```
 
-    ## Saving 7 x 5 in image
-
-### Plot 2: \_\_\_\_\_\_\_\_\_
+### Plot 2: Frequency of storms and fatalities by year
 
 #### Data cleaning for Plot 2
 
