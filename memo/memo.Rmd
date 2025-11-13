@@ -9,6 +9,8 @@ This document should contain a detailed account of the data clean up for your da
 ```{r load-packages, message = FALSE}
 library(tidyverse)
 library(broom)
+library(lubridate)
+library(RColorBrewer)
 ```
 
 ## Data Clean Up Steps for Overall Data
@@ -19,31 +21,29 @@ library(broom)
 
 ### Step 2: ________
 
-## Plots
+```{r loadCSV}
+storms <- read_csv("../data/storms.csv")
+```
 
-### ggsave example for saving plots
+```{r date_cleanup}
+storms <- storms|>
+  separate(
+    col = BEGIN_YEARMONTH,
+    into = c("BEGIN_YEAR", "BEGIN_MONTH"),
+    sep = 4,
+    convert = TRUE
+  )
+```
 
-```{r starwars ggsave example}
-p1 <- starwars |>
-  filter(mass < 1000, 
-         species %in% c("Human", "Cerean", "Pau'an", "Droid", "Gungan")) |>
-  ggplot() +
-  geom_point(aes(x = mass, 
-                 y = height, 
-                 color = species)) +
-  labs(x = "Weight (kg)", 
-       y = "Height (m)",
-       color = "Species",
-       title = "Weight and Height of Select Starwars Species",
-       caption = paste("This data comes from the starwars api: https://swapi.py43.com"))
+```{r change_date_format}
+storms <- storms|>
+  mutate(BEGIN_DATE = as_date(BEGIN_DATE_TIME))
 
-
-ggsave("example-starwars.png", width = 4, height = 4)
-
-ggsave("example-starwars-wide.png", width = 6, height = 4)
+view(storms)
 ```
 
 
+## Plots
 
 ### Plot 1: _________
 
@@ -51,19 +51,67 @@ ggsave("example-starwars-wide.png", width = 6, height = 4)
 
 These data cleaning sections are optional and depend on if you have some data cleaning steps specific to a particular plot
 
-```{r}
+```{r storms_by_year_cleaning}
+storms_by_year <- storms|>
+  count(BEGIN_YEAR, name = "n_events")
+```
 
+#### Final Plot 1
+
+```{r storms_by_year}
+ggplot(storms_by_year, aes(x = BEGIN_YEAR, y = n_events)) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2) +
+  labs(
+    title = "Frequency of Extreme Weather Events (2010–2020)",
+    subtitle = "Filtered to major natural disasters",
+    x = "Year",
+    y = "Number of Events"
+  ) +
+  theme_minimal()+
+  scale_x_continuous(breaks = c(2010,2012,2014,2016,2018,2020))
+
+ggsave("storms_by_year.png")
+```
+
+### Plot 2: _________
+
+#### Data cleaning for Plot 2
+```{r storms_and_injuries_cleaning}
+storms_by_year <- storms %>%
+  count(BEGIN_YEAR, name = "n_events")
+
+storm_casualties <- storms |> 
+  rowwise(EVENT_ID)|>
+  mutate(CASUALTIES = sum(c(INJURIES_DIRECT, INJURIES_INDIRECT, DEATHS_DIRECT, DEATHS_INDIRECT)))|>
+  group_by(BEGIN_YEAR)|>
+  summarise(casualties_year = sum(CASUALTIES))
+  
+casualties_storms <- left_join(storm_casualties, storms_by_year)
 ```
 
 
 #### Final Plot 1
 
-```{r}
-
+```{r storms_and_injuries}
+ggplot(casualties_storms, aes(BEGIN_YEAR)) +
+  geom_line(aes(y = n_events, color = "orange")) +
+  geom_line(aes(y = casualties_year, color = "red"))+
+  geom_point(aes(y = n_events, color = "orange")) +
+  geom_point(aes(y = casualties_year, color = "red"))+
+  labs(
+    title = "Frequency of Extreme Weather Events (2010–2020)",
+    subtitle = "Filtered to major natural disasters",
+    x = "Year",
+    y = "Number of Events",
+    color = ""
+  ) +
+  theme_minimal()+
+  scale_color_manual(
+    values = c("orange" = "black", "red" = "red"),
+    labels = c("orange" = "# of storms", "red" = "Injures + Fatalities"))+
+  scale_x_continuous(breaks = c(2010,2012,2014,2016,2018,2020))
 ```
-
-
-### Plot 2: _________
 
 ### Plot 3: ___________
 
