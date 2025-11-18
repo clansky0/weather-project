@@ -95,24 +95,44 @@ casualties_storms <- left_join(storm_casualties, storms_by_year)
 
 
 ```{r total_damage_cost}
+#Replace NA with 0
 storm_damages <- storms
 storm_damages$DAMAGE_PROPERTY[is.na(storm_damages$DAMAGE_PROPERTY)] <- 0
 storm_damages$DAMAGE_CROPS[is.na(storm_damages$DAMAGE_CROPS)] <- 0
 
+# Convert crop damage to numeric
+storm_damages$CROPS_NUM <- numeric(length(storm_damages$DAMAGE_CROPS))
+k_rows <- grepl("K", storm_damages$DAMAGE_CROPS)
+storm_damages$CROPS_NUM[k_rows] <- as.numeric(gsub("K", "", storm_damages$DAMAGE_CROPS[k_rows])) / 100
 
+# Convert property damage to numeric
+storm_damages$PROP_NUM <- numeric(length(storm_damages$DAMAGE_PROPERTY))
+k_rows <- grepl("K", storm_damages$DAMAGE_PROPERTY)
+storm_damages$PROP_NUM[k_rows] <- as.numeric(gsub("K", "", storm_damages$DAMAGE_PROPERTY[k_rows])) / 100
+
+#Find total damage cost per year
+storm_damages <- storm_damages|>
+  rowwise(EVENT_ID)|>
+  mutate(DAMAGES = sum(c(PROP_NUM, CROPS_NUM)))|>
+  group_by(BEGIN_YEAR)|>
+  summarise(damage_year = sum(DAMAGES))
+
+casualties_storms <- left_join(casualties_storms, storm_damages)
 ```
 
 
-#### Final Plot 1
+#### Final Plot 2
 
 ```{r storms_and_injuries}
 ggplot(casualties_storms, aes(BEGIN_YEAR)) +
   geom_line(aes(y = n_events, color = "orange")) +
   geom_line(aes(y = casualties_year, color = "red"))+
+  geom_line(aes(y = damage_year, color = "green"))+
   geom_point(aes(y = n_events, color = "orange")) +
   geom_point(aes(y = casualties_year, color = "red"))+
+  geom_point(aes(y = damage_year, color = "green"))+
   labs(
-    title = "Frequency of Extreme Weather Events (2010–2020)",
+    title = "Frequency of extreme weather events, cost, and injuries (2010–2020)",
     subtitle = "Filtered to major natural disasters",
     x = "Year",
     y = "Number of Events",
@@ -120,8 +140,10 @@ ggplot(casualties_storms, aes(BEGIN_YEAR)) +
   ) +
   theme_minimal()+
   scale_color_manual(
-    values = c("orange" = "black", "red" = "red"),
-    labels = c("orange" = "# of storms", "red" = "Injures + Fatalities"))+
+    values = c("orange" = "black", "red" = "red", "green" = "#00cd00"),
+    labels = c("orange" = "# of storms",
+               "red" = "Injures + Fatalities",
+               "green" = "Damages (in $100k)"))+
   scale_x_continuous(breaks = c(2010,2012,2014,2016,2018,2020))
 ```
 
