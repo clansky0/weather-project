@@ -89,6 +89,10 @@ ggplot(storms_by_year, aes(x = BEGIN_YEAR, y = n_events)) +
 
 #### Data cleaning for Plot 2
 
+First, we sum the indirect and direct injuries and deaths into one
+column, casualties, and merge that data frame with the storms by year
+dataset.
+
 ``` r
 storms_by_year <- storms %>%
   count(BEGIN_YEAR, name = "n_events")
@@ -103,6 +107,12 @@ casualties_storms <- left_join(storm_casualties, storms_by_year)
 ```
 
     ## Joining with `by = join_by(BEGIN_YEAR)`
+
+``` r
+storm_damages <- storms
+storm_damages$DAMAGE_PROPERTY[is.na(storm_damages$DAMAGE_PROPERTY)] <- 0
+storm_damages$DAMAGE_CROPS[is.na(storm_damages$DAMAGE_CROPS)] <- 0
+```
 
 #### Final Plot 1
 

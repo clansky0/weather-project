@@ -24,6 +24,7 @@ library(RColorBrewer)
 ```{r loadCSV, message=FALSE}
 storms <- read_csv("../data/storms.csv")
 ```
+
 To put the dates in a more usable format, we split up the format from year month into two columns, year and month.
 ```{r date_cleanup}
 storms <- storms|>
@@ -76,6 +77,9 @@ ggplot(storms_by_year, aes(x = BEGIN_YEAR, y = n_events)) +
 ### Plot 2: Frequency of storms and fatalities by year
 
 #### Data cleaning for Plot 2
+
+First, we sum the indirect and direct injuries and deaths into one column, casualties, and merge that data frame with the storms by year dataset.
+
 ```{r storms_and_injuries_cleaning}
 storms_by_year <- storms %>%
   count(BEGIN_YEAR, name = "n_events")
@@ -87,6 +91,15 @@ storm_casualties <- storms |>
   summarise(casualties_year = sum(CASUALTIES))
   
 casualties_storms <- left_join(storm_casualties, storms_by_year)
+```
+
+
+```{r total_damage_cost}
+storm_damages <- storms
+storm_damages$DAMAGE_PROPERTY[is.na(storm_damages$DAMAGE_PROPERTY)] <- 0
+storm_damages$DAMAGE_CROPS[is.na(storm_damages$DAMAGE_CROPS)] <- 0
+
+
 ```
 
 
@@ -121,7 +134,5 @@ Add more plot sections as needed. Each project should have at least 3 plots, but
 
 Graph Ideas: 
 
+Line graph of all storms by year
 stacked line graph by storm type
-Map of most common storms by area
-Add injuries/fatalaties + damages to graph
-annotations about major events like el nino
