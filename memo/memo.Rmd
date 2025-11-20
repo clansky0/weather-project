@@ -135,7 +135,7 @@ ggplot(casualties_storms, aes(BEGIN_YEAR)) +
     title = "Frequency of extreme weather events, cost, and injuries (2010–2020)",
     subtitle = "Filtered to major natural disasters",
     x = "Year",
-    y = "Number of Events",
+    y = "Storm Count / Deaths  & Injuries / Damages Cost ($100k)",
     color = ""
   ) +
   theme_minimal()+
@@ -145,6 +145,8 @@ ggplot(casualties_storms, aes(BEGIN_YEAR)) +
                "red" = "Injures + Fatalities",
                "green" = "Damages (in $100k)"))+
   scale_x_continuous(breaks = c(2010,2012,2014,2016,2018,2020))
+ggsave("storms_injuries_cost.png")
+
 ```
 
 ### Plot 3: Final Plot 3
