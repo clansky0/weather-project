@@ -18,15 +18,147 @@ library(RColorBrewer)
 
 ## Data Clean Up Steps for Overall Data
 
-### Step 1: Remove all unused columns
+### Step 1: Read Individual CSV Files
 
-**SHOULD WE COPY PASTE OUR DATA CLEANING FROM THE PROPOSAL?**
-
-### Step 2: \_\_\_\_\_\_\_\_
+Our data came split into separate files by year. Here, we read each of
+these files, and remove the columns we do not plan on using. These are
+set to not run because the csv files are too large to easily push to
+GitHub, and Posit would frequently crash trying to read them.
 
 ``` r
+StormEvents_2010 <- read_csv("../data/ignore/StormEvents_details-ftp_v1.0_d2010_c20250520.csv")
+FiltStormEvents2010 <- StormEvents_2010|>
+  filter(EVENT_TYPE %in% c("Avalanche","Blizzard","Drought","Flood","Flash Flood","Excessive Heat","Tornado","Tropical Storm","Tsunami","Wildfire"))
+
+FiltStormEvents2010 <- FiltStormEvents2010 |>
+  select(-STATE_FIPS,-CZ_TYPE,-CZ_FIPS,-CZ_NAME,-TOR_F_SCALE, -TOR_LENGTH,-TOR_WIDTH,-TOR_OTHER_WFO,-TOR_OTHER_CZ_STATE,-TOR_OTHER_CZ_FIPS,-TOR_OTHER_CZ_NAME,-BEGIN_RANGE,-BEGIN_AZIMUTH,-BEGIN_LOCATION,-END_RANGE,-END_AZIMUTH,-END_LOCATION,-EPISODE_NARRATIVE,-EVENT_NARRATIVE,-DATA_SOURCE,-WFO,-YEAR)
+```
+
+``` r
+StormEvents_2011 <- read_csv("../data/ignore/StormEvents_details-ftp_v1.0_d2011_c20250520.csv")
+FiltStormEvents2011 <- StormEvents_2011|>
+  filter(EVENT_TYPE %in% c("Avalanche","Blizzard","Drought","Flood","Flash Flood","Excessive Heat","Tornado","Tropical Storm","Tsunami","Wildfire"))
+
+FiltStormEvents2011 <- FiltStormEvents2011 |>
+  select(-STATE_FIPS,-CZ_TYPE,-CZ_FIPS,-CZ_NAME,-TOR_F_SCALE, -TOR_LENGTH,-TOR_WIDTH,-TOR_OTHER_WFO,-TOR_OTHER_CZ_STATE,-TOR_OTHER_CZ_FIPS,-TOR_OTHER_CZ_NAME,-BEGIN_RANGE,-BEGIN_AZIMUTH,-BEGIN_LOCATION,-END_RANGE,-END_AZIMUTH,-END_LOCATION,-EPISODE_NARRATIVE,-EVENT_NARRATIVE,-DATA_SOURCE,-WFO,-YEAR)
+```
+
+``` r
+StormEvents_2012 <- read_csv("../data/ignore/StormEvents_details-ftp_v1.0_d2012_c20250520.csv")
+
+FiltStormEvents2012 <- StormEvents_2012|>
+  filter(EVENT_TYPE %in% c("Avalanche","Blizzard","Drought","Flood","Flash Flood","Excessive Heat","Tornado","Tropical Storm","Tsunami","Wildfire"))
+
+FiltStormEvents2012 <- FiltStormEvents2012 |>
+  select(-STATE_FIPS,-CZ_TYPE,-CZ_FIPS,-CZ_NAME,-TOR_F_SCALE, -TOR_LENGTH,-TOR_WIDTH,-TOR_OTHER_WFO,-TOR_OTHER_CZ_STATE,-TOR_OTHER_CZ_FIPS,-TOR_OTHER_CZ_NAME,-BEGIN_RANGE,-BEGIN_AZIMUTH,-BEGIN_LOCATION,-END_RANGE,-END_AZIMUTH,-END_LOCATION,-EPISODE_NARRATIVE,-EVENT_NARRATIVE,-DATA_SOURCE,-WFO,-YEAR)
+```
+
+``` r
+StormEvents_2013 <- read_csv("../data/ignore/StormEvents_details-ftp_v1.0_d2013_c20250520.csv")
+
+FiltStormEvents2013 <- StormEvents_2013|>
+  filter(EVENT_TYPE %in% c("Avalanche","Blizzard","Drought","Flood","Flash Flood","Excessive Heat","Tornado","Tropical Storm","Tsunami","Wildfire"))
+
+FiltStormEvents2013 <- FiltStormEvents2013 |>
+  select(-STATE_FIPS,-CZ_TYPE,-CZ_FIPS,-CZ_NAME,-TOR_F_SCALE, -TOR_LENGTH,-TOR_WIDTH,-TOR_OTHER_WFO,-TOR_OTHER_CZ_STATE,-TOR_OTHER_CZ_FIPS,-TOR_OTHER_CZ_NAME,-BEGIN_RANGE,-BEGIN_AZIMUTH,-BEGIN_LOCATION,-END_RANGE,-END_AZIMUTH,-END_LOCATION,-EPISODE_NARRATIVE,-EVENT_NARRATIVE,-DATA_SOURCE,-WFO,-YEAR)
+```
+
+``` r
+StormEvents_2014 <- read_csv("../data/ignore/StormEvents_details-ftp_v1.0_d2014_c20250520.csv")
+
+FiltStormEvents2014 <- StormEvents_2014|>
+  filter(EVENT_TYPE %in% c("Avalanche","Blizzard","Drought","Flood","Flash Flood","Excessive Heat","Tornado","Tropical Storm","Tsunami","Wildfire"))
+
+FiltStormEvents2014 <- FiltStormEvents2014 |>
+  select(-STATE_FIPS,-CZ_TYPE,-CZ_FIPS,-CZ_NAME,-TOR_F_SCALE, -TOR_LENGTH,-TOR_WIDTH,-TOR_OTHER_WFO,-TOR_OTHER_CZ_STATE,-TOR_OTHER_CZ_FIPS,-TOR_OTHER_CZ_NAME,-BEGIN_RANGE,-BEGIN_AZIMUTH,-BEGIN_LOCATION,-END_RANGE,-END_AZIMUTH,-END_LOCATION,-EPISODE_NARRATIVE,-EVENT_NARRATIVE,-DATA_SOURCE,-WFO,-YEAR)
+```
+
+``` r
+StormEvents_2015 <- read_csv("../data/ignore/StormEvents_details-ftp_v1.0_d2015_c20250818.csv")
+
+FiltStormEvents2015 <- StormEvents_2015|>
+  filter(EVENT_TYPE %in% c("Avalanche","Blizzard","Drought","Flood","Flash Flood","Excessive Heat","Tornado","Tropical Storm","Tsunami","Wildfire"))
+
+FiltStormEvents2015 <- FiltStormEvents2015 |>
+  select(-STATE_FIPS,-CZ_TYPE,-CZ_FIPS,-CZ_NAME,-TOR_F_SCALE, -TOR_LENGTH,-TOR_WIDTH,-TOR_OTHER_WFO,-TOR_OTHER_CZ_STATE,-TOR_OTHER_CZ_FIPS,-TOR_OTHER_CZ_NAME,-BEGIN_RANGE,-BEGIN_AZIMUTH,-BEGIN_LOCATION,-END_RANGE,-END_AZIMUTH,-END_LOCATION,-EPISODE_NARRATIVE,-EVENT_NARRATIVE,-DATA_SOURCE,-WFO,-YEAR)
+```
+
+``` r
+StormEvents_2016 <- read_csv("../data/ignore/StormEvents_details-ftp_v1.0_d2016_c20250818.csv")
+
+FiltStormEvents2016 <- StormEvents_2016|>
+  filter(EVENT_TYPE %in% c("Avalanche","Blizzard","Drought","Flood","Flash Flood","Excessive Heat","Tornado","Tropical Storm","Tsunami","Wildfire"))
+
+FiltStormEvents2016 <- FiltStormEvents2016 |>
+  select(-STATE_FIPS,-CZ_TYPE,-CZ_FIPS,-CZ_NAME,-TOR_F_SCALE, -TOR_LENGTH,-TOR_WIDTH,-TOR_OTHER_WFO,-TOR_OTHER_CZ_STATE,-TOR_OTHER_CZ_FIPS,-TOR_OTHER_CZ_NAME,-BEGIN_RANGE,-BEGIN_AZIMUTH,-BEGIN_LOCATION,-END_RANGE,-END_AZIMUTH,-END_LOCATION,-EPISODE_NARRATIVE,-EVENT_NARRATIVE,-DATA_SOURCE,-WFO,-YEAR)
+```
+
+``` r
+StormEvents_2017 <- read_csv("../data/ignore/StormEvents_details-ftp_v1.0_d2017_c20250520.csv")
+
+FiltStormEvents2017 <- StormEvents_2017|>
+  filter(EVENT_TYPE %in% c("Avalanche","Blizzard","Drought","Flood","Flash Flood","Excessive Heat","Tornado","Tropical Storm","Tsunami","Wildfire"))
+
+FiltStormEvents2017 <- FiltStormEvents2017 |>
+  select(-STATE_FIPS,-CZ_TYPE,-CZ_FIPS,-CZ_NAME,-TOR_F_SCALE, -TOR_LENGTH,-TOR_WIDTH,-TOR_OTHER_WFO,-TOR_OTHER_CZ_STATE,-TOR_OTHER_CZ_FIPS,-TOR_OTHER_CZ_NAME,-BEGIN_RANGE,-BEGIN_AZIMUTH,-BEGIN_LOCATION,-END_RANGE,-END_AZIMUTH,-END_LOCATION,-EPISODE_NARRATIVE,-EVENT_NARRATIVE,-DATA_SOURCE,-WFO,-YEAR)
+```
+
+``` r
+StormEvents_2018 <- read_csv("../data/ignore/StormEvents_details-ftp_v1.0_d2018_c20250520.csv")
+
+FiltStormEvents2018 <- StormEvents_2018|>
+  filter(EVENT_TYPE %in% c("Avalanche","Blizzard","Drought","Flood","Flash Flood","Excessive Heat","Tornado","Tropical Storm","Tsunami","Wildfire"))
+
+FiltStormEvents2018 <- FiltStormEvents2018 |>
+  select(-STATE_FIPS,-CZ_TYPE,-CZ_FIPS,-CZ_NAME,-TOR_F_SCALE, -TOR_LENGTH,-TOR_WIDTH,-TOR_OTHER_WFO,-TOR_OTHER_CZ_STATE,-TOR_OTHER_CZ_FIPS,-TOR_OTHER_CZ_NAME,-BEGIN_RANGE,-BEGIN_AZIMUTH,-BEGIN_LOCATION,-END_RANGE,-END_AZIMUTH,-END_LOCATION,-EPISODE_NARRATIVE,-EVENT_NARRATIVE,-DATA_SOURCE,-WFO,-YEAR)
+```
+
+``` r
+StormEvents_2019 <- read_csv("../data/ignore/StormEvents_details-ftp_v1.0_d2019_c20250520.csv")
+
+FiltStormEvents2019 <- StormEvents_2019|>
+  filter(EVENT_TYPE %in% c("Avalanche","Blizzard","Drought","Flood","Flash Flood","Excessive Heat","Tornado","Tropical Storm","Tsunami","Wildfire"))
+
+FiltStormEvents2019 <- FiltStormEvents2019|>
+  select(-STATE_FIPS,-CZ_TYPE,-CZ_FIPS,-CZ_NAME,-TOR_F_SCALE, -TOR_LENGTH,-TOR_WIDTH,-TOR_OTHER_WFO,-TOR_OTHER_CZ_STATE,-TOR_OTHER_CZ_FIPS,-TOR_OTHER_CZ_NAME,-BEGIN_RANGE,-BEGIN_AZIMUTH,-BEGIN_LOCATION,-END_RANGE,-END_AZIMUTH,-END_LOCATION,-EPISODE_NARRATIVE,-EVENT_NARRATIVE,-DATA_SOURCE,-WFO,-YEAR)
+```
+
+``` r
+StormEvents_2020 <- read_csv("../data/ignore/StormEvents_details-ftp_v1.0_d2020_c20250702.csv")
+
+FiltStormEvents2020 <- StormEvents_2020|>
+  filter(EVENT_TYPE %in% c("Avalanche","Blizzard","Drought","Flood","Flash Flood","Excessive Heat","Tornado","Tropical Storm","Tsunami","Wildfire"))
+
+FiltStormEvents2020 <- FiltStormEvents2020|>
+  select(-STATE_FIPS,-CZ_TYPE,-CZ_FIPS,-CZ_NAME,-TOR_F_SCALE, -TOR_LENGTH,-TOR_WIDTH,-TOR_OTHER_WFO,-TOR_OTHER_CZ_STATE,-TOR_OTHER_CZ_FIPS,-TOR_OTHER_CZ_NAME,-BEGIN_RANGE,-BEGIN_AZIMUTH,-BEGIN_LOCATION,-END_RANGE,-END_AZIMUTH,-END_LOCATION,-EPISODE_NARRATIVE,-EVENT_NARRATIVE,-DATA_SOURCE,-WFO,-YEAR)
+```
+
+### Step 2: Combine into one CSV file
+
+Next, we took all these individual CSVs and combined them into one. This
+is also set to not run since the original CSVs are not loaded.
+
+``` r
+storms <- rbind(FiltStormEvents2010,
+                FiltStormEvents2011,
+                FiltStormEvents2012,
+                FiltStormEvents2013,
+                FiltStormEvents2014,
+                FiltStormEvents2015,
+                FiltStormEvents2016,
+                FiltStormEvents2017,
+                FiltStormEvents2018,
+                FiltStormEvents2019,
+                FiltStormEvents2020)
+write_csv(storms, file="../data/storms.csv")
+```
+
+``` r
+# reload CSV because above chunks are eval=FALSE to avoid crashing Posit.
 storms <- read_csv("../data/storms.csv")
 ```
+
+### Step 3: General Data Cleaning
 
 To put the dates in a more usable format, we split up the format from
 year month into two columns, year and month.
@@ -55,8 +187,8 @@ storms <- storms|>
 
 #### Data cleanup steps specific to plot 1
 
-These data cleaning sections are optional and depend on if you have some
-data cleaning steps specific to a particular plot
+We create a new dataframe for this plot, and count the number of storms
+per year.
 
 ``` r
 storms_by_year <- storms|>
@@ -108,6 +240,12 @@ casualties_storms <- left_join(storm_casualties, storms_by_year)
 
     ## Joining with `by = join_by(BEGIN_YEAR)`
 
+To add in the total damage cost, we must reformat the way the cost is
+written. In the dataset, cost is abbreviated with K for thousand, and
+values with no damage are a mix between 0.00K and NA. Here, we rewrite
+the cost to a usable format and set all NA and 0.00K values to 0. Then,
+we join the casualty and cost dataframes.
+
 ``` r
 #Replace NA with 0
 storm_damages <- storms
@@ -150,12 +288,12 @@ ggplot(casualties_storms, aes(BEGIN_YEAR)) +
     title = "Frequency of extreme weather events, cost, and injuries (2010–2020)",
     subtitle = "Filtered to major natural disasters",
     x = "Year",
-    y = "Number of Events",
+    y = "Storm Count / Deaths  & Injuries / Damages Cost ($100k)",
     color = ""
   ) +
   theme_minimal()+
   scale_color_manual(
-    values = c("orange" = "black", "red" = "red", "green" = "#00cd00"),
+    values = c("orange" = "black", "red" = "purple", "green" = "#00cd00"),
     labels = c("orange" = "# of storms",
                "red" = "Injures + Fatalities",
                "green" = "Damages (in $100k)"))+
@@ -164,12 +302,25 @@ ggplot(casualties_storms, aes(BEGIN_YEAR)) +
 
 ![](memo_files/figure-gfm/storms_and_injuries-1.png)<!-- -->
 
+``` r
+#ggsave("storms_injuries_cost.png")
+```
+
 ### Plot 3: Final Plot 3
+
+#### Data Cleaning for Plot 3
+
+Here, we count
 
 ``` r
 storms_by_type_year <- storms |>
-count(BEGIN_YEAR, EVENT_TYPE, name = "n_events")
+  count(BEGIN_YEAR, EVENT_TYPE, name = "n_events")|>
+  filter(EVENT_TYPE %in% c("Blizzard","Drought","Flood","Flash Flood","Excessive Heat","Tornado","Tropical Storm","Wildfire"))
+```
 
+#### Final Plot 3
+
+``` r
 ggplot(storms_by_type_year,
 aes(x = BEGIN_YEAR,
 y = n_events,
@@ -187,13 +338,10 @@ scale_x_continuous(breaks = c(2010, 2012, 2014, 2016, 2018, 2020)) +
 scale_fill_brewer(palette = "Set2")
 ```
 
-    ## Warning in RColorBrewer::brewer.pal(n, pal): n too large, allowed maximum for palette Set2 is 8
-    ## Returning the palette you asked for with that many colors
-
-![](memo_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
+![](memo_files/figure-gfm/by_storm_type-1.png)<!-- -->
 
 ``` r
-# ggsave("storms_by_type.png")
+#ggsave("storms_by_type.png")
 ```
 
 ### Plot 4: \_\_\_\_\_\_\_\_\_\_\_
