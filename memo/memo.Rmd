@@ -1,19 +1,22 @@
 ---
 title: "Project memo"
-author: "Team name"
-output: github_document
+author: "Team Weather: Colin, Kailer, Jennifer"
+output: html_document
 ---
 
-This document should contain a detailed account of the data clean up for your data and the design choices you are making for your plots. For instance you will want to document choices you've made that were intentional for your graphic, e.g. color you've chosen for the plot. Think of this document as a code script someone can follow to reproduce the data cleaning steps and graphics in your handout.
+## Data Clean Up Steps for Overall Data
+
+### Step 0: Load Libraries
 
 ```{r load-packages, message = FALSE}
 library(tidyverse)
 library(broom)
 library(lubridate)
 library(RColorBrewer)
+library(leaflet)
+library(crosstalk)
+library(htmltools)
 ```
-
-## Data Clean Up Steps for Overall Data
 
 ### Step 1: Read Individual CSV Files
 
@@ -220,28 +223,38 @@ storm_casualties <- storms |>
   mutate(CASUALTIES = sum(c(INJURIES_DIRECT, INJURIES_INDIRECT, DEATHS_DIRECT, DEATHS_INDIRECT)))|>
   group_by(BEGIN_YEAR)|>
   summarise(casualties_year = sum(CASUALTIES))
-  
-casualties_storms <- left_join(storm_casualties, storms_by_year)
 ```
+
+```{r left_join_injuries}
+casualties_storms <- left_join(storm_casualties, storms_by_year)
+
+```
+  
 
 To add in the total damage cost, we must reformat the way the cost is written. In the dataset, cost is abbreviated with K for thousand, and values with no damage are a mix between 0.00K and NA. Here, we rewrite the cost to a usable format and set all NA and 0.00K values to 0. Then, we join the casualty and cost dataframes.
 
-```{r total_damage_cost}
+```{r total_damage_NA}
 #Replace NA with 0
 storm_damages <- storms
 storm_damages$DAMAGE_PROPERTY[is.na(storm_damages$DAMAGE_PROPERTY)] <- 0
 storm_damages$DAMAGE_CROPS[is.na(storm_damages$DAMAGE_CROPS)] <- 0
+```
 
+```{r total_damage_cost}
 # Convert crop damage to numeric
 storm_damages$CROPS_NUM <- numeric(length(storm_damages$DAMAGE_CROPS))
 k_rows <- grepl("K", storm_damages$DAMAGE_CROPS)
 storm_damages$CROPS_NUM[k_rows] <- as.numeric(gsub("K", "", storm_damages$DAMAGE_CROPS[k_rows])) / 100
+```
 
+```{r damage_to_numeric}
 # Convert property damage to numeric
 storm_damages$PROP_NUM <- numeric(length(storm_damages$DAMAGE_PROPERTY))
 k_rows <- grepl("K", storm_damages$DAMAGE_PROPERTY)
 storm_damages$PROP_NUM[k_rows] <- as.numeric(gsub("K", "", storm_damages$DAMAGE_PROPERTY[k_rows])) / 100
+```
 
+```{r total_damage_sum}
 #Find total damage cost per year
 storm_damages <- storm_damages|>
   rowwise(EVENT_ID)|>
@@ -267,7 +280,7 @@ ggplot(casualties_storms, aes(BEGIN_YEAR)) +
     title = "Frequency of extreme weather events, cost, and injuries (2010–2020)",
     subtitle = "Filtered to major natural disasters",
     x = "Year",
-    y = "Storm Count / Deaths  & Injuries / Damages Cost ($100k)",
+    y = "Frequency",
     color = ""
   ) +
   theme_minimal()+
@@ -316,7 +329,41 @@ scale_fill_brewer(palette = "Set2")
 ### Plot 4: ___________ 
 
 
-Graph Ideas: 
+```{r leaflet}
+#crosstalk code from https://stackoverflow.com/questions/62849300/r-leaflet-add-a-range-slider-to-filter-markers-without-shiny
 
-Line graph of all storms by year
-stacked line graph by storm type
+map_storms <- storms|>
+  filter(EVENT_TYPE %in% c("Tornado"))|>
+  mutate(id = seq_len(n()))
+
+shared_data <- SharedData$new(map_storms, key = ~id, group = "tornado_events")
+
+#slider <- filter_slider("date", "Year", shared_data, ~BEGIN_YEAR, step = 1, ticks = FALSE, width = "90%", dragRange = FALSE, sep = NULL)
+
+slider <- filter_select("year_select", "Select Year", shared_data, ~BEGIN_YEAR, allLevels = TRUE, multiple = FALSE)
+
+leaflet_map <- leaflet(shared_data) %>%
+  addProviderTiles(provider = providers$OpenStreetMap) %>%
+  addCircleMarkers(lng = ~BEGIN_LON, 
+                  lat = ~BEGIN_LAT, 
+                  popup = ~EVENT_TYPE,
+                  color = "red",
+                  radius = 1,
+                  opacity = 0.6,
+                  group = ~EVENT_TYPE)
+
+tagList(
+  slider,
+  leaflet_map)
+```
+
+
+```{r}
+storms_location <- storms|>
+  filter(!is.na(END_LON))|>
+  count(EVENT_TYPE)
+
+view(storms_location)
+```
+
+
