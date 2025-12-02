@@ -16,6 +16,9 @@ library(RColorBrewer)
 library(leaflet)
 library(crosstalk)
 library(htmltools)
+library(sf)
+library(mapdata)
+library(tigris)
 ```
 
 ### Step 1: Read Individual CSV Files
@@ -24,110 +27,110 @@ Our data came split into separate files by year. Here, we read each of these fil
 
 ```{r 2010, eval=FALSE}
 StormEvents_2010 <- read_csv("../data/ignore/StormEvents_details-ftp_v1.0_d2010_c20250520.csv")
-FiltStormEvents2010 <- StormEvents_2010|>
+StormEvents_2010 <- StormEvents_2010|>
   filter(EVENT_TYPE %in% c("Avalanche","Blizzard","Drought","Flood","Flash Flood","Excessive Heat","Tornado","Tropical Storm","Tsunami","Wildfire"))
 
-FiltStormEvents2010 <- FiltStormEvents2010 |>
-  select(-STATE_FIPS,-CZ_TYPE,-CZ_FIPS,-CZ_NAME,-TOR_F_SCALE, -TOR_LENGTH,-TOR_WIDTH,-TOR_OTHER_WFO,-TOR_OTHER_CZ_STATE,-TOR_OTHER_CZ_FIPS,-TOR_OTHER_CZ_NAME,-BEGIN_RANGE,-BEGIN_AZIMUTH,-BEGIN_LOCATION,-END_RANGE,-END_AZIMUTH,-END_LOCATION,-EPISODE_NARRATIVE,-EVENT_NARRATIVE,-DATA_SOURCE,-WFO,-YEAR)
+StormEvents_2010 <- StormEvents_2010 |>
+  select(-CZ_TYPE,-CZ_NAME,-TOR_F_SCALE, -TOR_LENGTH,-TOR_WIDTH,-TOR_OTHER_WFO,-TOR_OTHER_CZ_STATE,-TOR_OTHER_CZ_FIPS,-TOR_OTHER_CZ_NAME,-BEGIN_RANGE,-BEGIN_AZIMUTH,-BEGIN_LOCATION,-END_RANGE,-END_AZIMUTH,-END_LOCATION,-EPISODE_NARRATIVE,-EVENT_NARRATIVE,-DATA_SOURCE,-WFO,-YEAR)
 ```
 
 ```{r 2011, eval=FALSE}
 StormEvents_2011 <- read_csv("../data/ignore/StormEvents_details-ftp_v1.0_d2011_c20250520.csv")
-FiltStormEvents2011 <- StormEvents_2011|>
+StormEvents_2011 <- StormEvents_2011|>
   filter(EVENT_TYPE %in% c("Avalanche","Blizzard","Drought","Flood","Flash Flood","Excessive Heat","Tornado","Tropical Storm","Tsunami","Wildfire"))
 
-FiltStormEvents2011 <- FiltStormEvents2011 |>
-  select(-STATE_FIPS,-CZ_TYPE,-CZ_FIPS,-CZ_NAME,-TOR_F_SCALE, -TOR_LENGTH,-TOR_WIDTH,-TOR_OTHER_WFO,-TOR_OTHER_CZ_STATE,-TOR_OTHER_CZ_FIPS,-TOR_OTHER_CZ_NAME,-BEGIN_RANGE,-BEGIN_AZIMUTH,-BEGIN_LOCATION,-END_RANGE,-END_AZIMUTH,-END_LOCATION,-EPISODE_NARRATIVE,-EVENT_NARRATIVE,-DATA_SOURCE,-WFO,-YEAR)
+StormEvents_2011 <- StormEvents_2011 |>
+  select(-CZ_TYPE,-CZ_NAME,-TOR_F_SCALE, -TOR_LENGTH,-TOR_WIDTH,-TOR_OTHER_WFO,-TOR_OTHER_CZ_STATE,-TOR_OTHER_CZ_FIPS,-TOR_OTHER_CZ_NAME,-BEGIN_RANGE,-BEGIN_AZIMUTH,-BEGIN_LOCATION,-END_RANGE,-END_AZIMUTH,-END_LOCATION,-EPISODE_NARRATIVE,-EVENT_NARRATIVE,-DATA_SOURCE,-WFO,-YEAR)
 ```
 
 ```{r 2012, eval=FALSE}
 StormEvents_2012 <- read_csv("../data/ignore/StormEvents_details-ftp_v1.0_d2012_c20250520.csv")
 
-FiltStormEvents2012 <- StormEvents_2012|>
+StormEvents_2012 <- StormEvents_2012|>
   filter(EVENT_TYPE %in% c("Avalanche","Blizzard","Drought","Flood","Flash Flood","Excessive Heat","Tornado","Tropical Storm","Tsunami","Wildfire"))
 
-FiltStormEvents2012 <- FiltStormEvents2012 |>
-  select(-STATE_FIPS,-CZ_TYPE,-CZ_FIPS,-CZ_NAME,-TOR_F_SCALE, -TOR_LENGTH,-TOR_WIDTH,-TOR_OTHER_WFO,-TOR_OTHER_CZ_STATE,-TOR_OTHER_CZ_FIPS,-TOR_OTHER_CZ_NAME,-BEGIN_RANGE,-BEGIN_AZIMUTH,-BEGIN_LOCATION,-END_RANGE,-END_AZIMUTH,-END_LOCATION,-EPISODE_NARRATIVE,-EVENT_NARRATIVE,-DATA_SOURCE,-WFO,-YEAR)
+StormEvents_2012 <- StormEvents_2012 |>
+  select(-CZ_TYPE,-CZ_NAME,-TOR_F_SCALE, -TOR_LENGTH,-TOR_WIDTH,-TOR_OTHER_WFO,-TOR_OTHER_CZ_STATE,-TOR_OTHER_CZ_FIPS,-TOR_OTHER_CZ_NAME,-BEGIN_RANGE,-BEGIN_AZIMUTH,-BEGIN_LOCATION,-END_RANGE,-END_AZIMUTH,-END_LOCATION,-EPISODE_NARRATIVE,-EVENT_NARRATIVE,-DATA_SOURCE,-WFO,-YEAR)
 ```
 
 ```{r 2013, eval=FALSE}
 StormEvents_2013 <- read_csv("../data/ignore/StormEvents_details-ftp_v1.0_d2013_c20250520.csv")
 
-FiltStormEvents2013 <- StormEvents_2013|>
+StormEvents_2013 <- StormEvents_2013|>
   filter(EVENT_TYPE %in% c("Avalanche","Blizzard","Drought","Flood","Flash Flood","Excessive Heat","Tornado","Tropical Storm","Tsunami","Wildfire"))
 
-FiltStormEvents2013 <- FiltStormEvents2013 |>
-  select(-STATE_FIPS,-CZ_TYPE,-CZ_FIPS,-CZ_NAME,-TOR_F_SCALE, -TOR_LENGTH,-TOR_WIDTH,-TOR_OTHER_WFO,-TOR_OTHER_CZ_STATE,-TOR_OTHER_CZ_FIPS,-TOR_OTHER_CZ_NAME,-BEGIN_RANGE,-BEGIN_AZIMUTH,-BEGIN_LOCATION,-END_RANGE,-END_AZIMUTH,-END_LOCATION,-EPISODE_NARRATIVE,-EVENT_NARRATIVE,-DATA_SOURCE,-WFO,-YEAR)
+StormEvents_2013 <- StormEvents_2013 |>
+  select(-CZ_TYPE,-CZ_NAME,-TOR_F_SCALE, -TOR_LENGTH,-TOR_WIDTH,-TOR_OTHER_WFO,-TOR_OTHER_CZ_STATE,-TOR_OTHER_CZ_FIPS,-TOR_OTHER_CZ_NAME,-BEGIN_RANGE,-BEGIN_AZIMUTH,-BEGIN_LOCATION,-END_RANGE,-END_AZIMUTH,-END_LOCATION,-EPISODE_NARRATIVE,-EVENT_NARRATIVE,-DATA_SOURCE,-WFO,-YEAR)
 ```
 
 ```{r 2014, eval=FALSE}
 StormEvents_2014 <- read_csv("../data/ignore/StormEvents_details-ftp_v1.0_d2014_c20250520.csv")
 
-FiltStormEvents2014 <- StormEvents_2014|>
+StormEvents_2014 <- StormEvents_2014|>
   filter(EVENT_TYPE %in% c("Avalanche","Blizzard","Drought","Flood","Flash Flood","Excessive Heat","Tornado","Tropical Storm","Tsunami","Wildfire"))
 
-FiltStormEvents2014 <- FiltStormEvents2014 |>
-  select(-STATE_FIPS,-CZ_TYPE,-CZ_FIPS,-CZ_NAME,-TOR_F_SCALE, -TOR_LENGTH,-TOR_WIDTH,-TOR_OTHER_WFO,-TOR_OTHER_CZ_STATE,-TOR_OTHER_CZ_FIPS,-TOR_OTHER_CZ_NAME,-BEGIN_RANGE,-BEGIN_AZIMUTH,-BEGIN_LOCATION,-END_RANGE,-END_AZIMUTH,-END_LOCATION,-EPISODE_NARRATIVE,-EVENT_NARRATIVE,-DATA_SOURCE,-WFO,-YEAR)
+StormEvents_2014 <- StormEvents_2014 |>
+  select(-CZ_TYPE,-CZ_NAME,-TOR_F_SCALE, -TOR_LENGTH,-TOR_WIDTH,-TOR_OTHER_WFO,-TOR_OTHER_CZ_STATE,-TOR_OTHER_CZ_FIPS,-TOR_OTHER_CZ_NAME,-BEGIN_RANGE,-BEGIN_AZIMUTH,-BEGIN_LOCATION,-END_RANGE,-END_AZIMUTH,-END_LOCATION,-EPISODE_NARRATIVE,-EVENT_NARRATIVE,-DATA_SOURCE,-WFO,-YEAR)
 ```
 
 ```{r 2015, eval=FALSE}
 StormEvents_2015 <- read_csv("../data/ignore/StormEvents_details-ftp_v1.0_d2015_c20250818.csv")
 
-FiltStormEvents2015 <- StormEvents_2015|>
+StormEvents_2015 <- StormEvents_2015|>
   filter(EVENT_TYPE %in% c("Avalanche","Blizzard","Drought","Flood","Flash Flood","Excessive Heat","Tornado","Tropical Storm","Tsunami","Wildfire"))
 
-FiltStormEvents2015 <- FiltStormEvents2015 |>
-  select(-STATE_FIPS,-CZ_TYPE,-CZ_FIPS,-CZ_NAME,-TOR_F_SCALE, -TOR_LENGTH,-TOR_WIDTH,-TOR_OTHER_WFO,-TOR_OTHER_CZ_STATE,-TOR_OTHER_CZ_FIPS,-TOR_OTHER_CZ_NAME,-BEGIN_RANGE,-BEGIN_AZIMUTH,-BEGIN_LOCATION,-END_RANGE,-END_AZIMUTH,-END_LOCATION,-EPISODE_NARRATIVE,-EVENT_NARRATIVE,-DATA_SOURCE,-WFO,-YEAR)
+StormEvents_2015 <- StormEvents_2015 |>
+  select(-CZ_TYPE,-CZ_NAME,-TOR_F_SCALE, -TOR_LENGTH,-TOR_WIDTH,-TOR_OTHER_WFO,-TOR_OTHER_CZ_STATE,-TOR_OTHER_CZ_FIPS,-TOR_OTHER_CZ_NAME,-BEGIN_RANGE,-BEGIN_AZIMUTH,-BEGIN_LOCATION,-END_RANGE,-END_AZIMUTH,-END_LOCATION,-EPISODE_NARRATIVE,-EVENT_NARRATIVE,-DATA_SOURCE,-WFO,-YEAR)
 ```
 
 ```{r 2016, eval=FALSE}
 StormEvents_2016 <- read_csv("../data/ignore/StormEvents_details-ftp_v1.0_d2016_c20250818.csv")
 
-FiltStormEvents2016 <- StormEvents_2016|>
+StormEvents_2016 <- StormEvents_2016|>
   filter(EVENT_TYPE %in% c("Avalanche","Blizzard","Drought","Flood","Flash Flood","Excessive Heat","Tornado","Tropical Storm","Tsunami","Wildfire"))
 
-FiltStormEvents2016 <- FiltStormEvents2016 |>
-  select(-STATE_FIPS,-CZ_TYPE,-CZ_FIPS,-CZ_NAME,-TOR_F_SCALE, -TOR_LENGTH,-TOR_WIDTH,-TOR_OTHER_WFO,-TOR_OTHER_CZ_STATE,-TOR_OTHER_CZ_FIPS,-TOR_OTHER_CZ_NAME,-BEGIN_RANGE,-BEGIN_AZIMUTH,-BEGIN_LOCATION,-END_RANGE,-END_AZIMUTH,-END_LOCATION,-EPISODE_NARRATIVE,-EVENT_NARRATIVE,-DATA_SOURCE,-WFO,-YEAR)
+StormEvents_2016 <- StormEvents_2016 |>
+  select(-CZ_TYPE,-CZ_NAME,-TOR_F_SCALE, -TOR_LENGTH,-TOR_WIDTH,-TOR_OTHER_WFO,-TOR_OTHER_CZ_STATE,-TOR_OTHER_CZ_FIPS,-TOR_OTHER_CZ_NAME,-BEGIN_RANGE,-BEGIN_AZIMUTH,-BEGIN_LOCATION,-END_RANGE,-END_AZIMUTH,-END_LOCATION,-EPISODE_NARRATIVE,-EVENT_NARRATIVE,-DATA_SOURCE,-WFO,-YEAR)
 ```
 
 ```{r 2017, eval=FALSE}
 StormEvents_2017 <- read_csv("../data/ignore/StormEvents_details-ftp_v1.0_d2017_c20250520.csv")
 
-FiltStormEvents2017 <- StormEvents_2017|>
+StormEvents_2017 <- StormEvents_2017|>
   filter(EVENT_TYPE %in% c("Avalanche","Blizzard","Drought","Flood","Flash Flood","Excessive Heat","Tornado","Tropical Storm","Tsunami","Wildfire"))
 
-FiltStormEvents2017 <- FiltStormEvents2017 |>
-  select(-STATE_FIPS,-CZ_TYPE,-CZ_FIPS,-CZ_NAME,-TOR_F_SCALE, -TOR_LENGTH,-TOR_WIDTH,-TOR_OTHER_WFO,-TOR_OTHER_CZ_STATE,-TOR_OTHER_CZ_FIPS,-TOR_OTHER_CZ_NAME,-BEGIN_RANGE,-BEGIN_AZIMUTH,-BEGIN_LOCATION,-END_RANGE,-END_AZIMUTH,-END_LOCATION,-EPISODE_NARRATIVE,-EVENT_NARRATIVE,-DATA_SOURCE,-WFO,-YEAR)
+StormEvents_2017 <- StormEvents_2017 |>
+  select(-CZ_TYPE,-CZ_NAME,-TOR_F_SCALE, -TOR_LENGTH,-TOR_WIDTH,-TOR_OTHER_WFO,-TOR_OTHER_CZ_STATE,-TOR_OTHER_CZ_FIPS,-TOR_OTHER_CZ_NAME,-BEGIN_RANGE,-BEGIN_AZIMUTH,-BEGIN_LOCATION,-END_RANGE,-END_AZIMUTH,-END_LOCATION,-EPISODE_NARRATIVE,-EVENT_NARRATIVE,-DATA_SOURCE,-WFO,-YEAR)
 ```
 
 ```{r 2018, eval=FALSE}
 StormEvents_2018 <- read_csv("../data/ignore/StormEvents_details-ftp_v1.0_d2018_c20250520.csv")
 
-FiltStormEvents2018 <- StormEvents_2018|>
+StormEvents_2018 <- StormEvents_2018|>
   filter(EVENT_TYPE %in% c("Avalanche","Blizzard","Drought","Flood","Flash Flood","Excessive Heat","Tornado","Tropical Storm","Tsunami","Wildfire"))
 
-FiltStormEvents2018 <- FiltStormEvents2018 |>
-  select(-STATE_FIPS,-CZ_TYPE,-CZ_FIPS,-CZ_NAME,-TOR_F_SCALE, -TOR_LENGTH,-TOR_WIDTH,-TOR_OTHER_WFO,-TOR_OTHER_CZ_STATE,-TOR_OTHER_CZ_FIPS,-TOR_OTHER_CZ_NAME,-BEGIN_RANGE,-BEGIN_AZIMUTH,-BEGIN_LOCATION,-END_RANGE,-END_AZIMUTH,-END_LOCATION,-EPISODE_NARRATIVE,-EVENT_NARRATIVE,-DATA_SOURCE,-WFO,-YEAR)
+StormEvents_2018 <- StormEvents_2018 |>
+  select(-CZ_TYPE,-CZ_NAME,-TOR_F_SCALE, -TOR_LENGTH,-TOR_WIDTH,-TOR_OTHER_WFO,-TOR_OTHER_CZ_STATE,-TOR_OTHER_CZ_FIPS,-TOR_OTHER_CZ_NAME,-BEGIN_RANGE,-BEGIN_AZIMUTH,-BEGIN_LOCATION,-END_RANGE,-END_AZIMUTH,-END_LOCATION,-EPISODE_NARRATIVE,-EVENT_NARRATIVE,-DATA_SOURCE,-WFO,-YEAR)
 ```
 
 ```{r 2019, eval=FALSE}
 StormEvents_2019 <- read_csv("../data/ignore/StormEvents_details-ftp_v1.0_d2019_c20250520.csv")
 
-FiltStormEvents2019 <- StormEvents_2019|>
+StormEvents_2019 <- StormEvents_2019|>
   filter(EVENT_TYPE %in% c("Avalanche","Blizzard","Drought","Flood","Flash Flood","Excessive Heat","Tornado","Tropical Storm","Tsunami","Wildfire"))
 
-FiltStormEvents2019 <- FiltStormEvents2019|>
-  select(-STATE_FIPS,-CZ_TYPE,-CZ_FIPS,-CZ_NAME,-TOR_F_SCALE, -TOR_LENGTH,-TOR_WIDTH,-TOR_OTHER_WFO,-TOR_OTHER_CZ_STATE,-TOR_OTHER_CZ_FIPS,-TOR_OTHER_CZ_NAME,-BEGIN_RANGE,-BEGIN_AZIMUTH,-BEGIN_LOCATION,-END_RANGE,-END_AZIMUTH,-END_LOCATION,-EPISODE_NARRATIVE,-EVENT_NARRATIVE,-DATA_SOURCE,-WFO,-YEAR)
+StormEvents_2019 <- StormEvents_2019|>
+  select(-CZ_TYPE,-CZ_NAME,-TOR_F_SCALE, -TOR_LENGTH,-TOR_WIDTH,-TOR_OTHER_WFO,-TOR_OTHER_CZ_STATE,-TOR_OTHER_CZ_FIPS,-TOR_OTHER_CZ_NAME,-BEGIN_RANGE,-BEGIN_AZIMUTH,-BEGIN_LOCATION,-END_RANGE,-END_AZIMUTH,-END_LOCATION,-EPISODE_NARRATIVE,-EVENT_NARRATIVE,-DATA_SOURCE,-WFO,-YEAR)
 ```
 
 ```{r 2020, eval=FALSE}
 StormEvents_2020 <- read_csv("../data/ignore/StormEvents_details-ftp_v1.0_d2020_c20250702.csv")
 
-FiltStormEvents2020 <- StormEvents_2020|>
+StormEvents_2020 <- StormEvents_2020|>
   filter(EVENT_TYPE %in% c("Avalanche","Blizzard","Drought","Flood","Flash Flood","Excessive Heat","Tornado","Tropical Storm","Tsunami","Wildfire"))
 
-FiltStormEvents2020 <- FiltStormEvents2020|>
-  select(-STATE_FIPS,-CZ_TYPE,-CZ_FIPS,-CZ_NAME,-TOR_F_SCALE, -TOR_LENGTH,-TOR_WIDTH,-TOR_OTHER_WFO,-TOR_OTHER_CZ_STATE,-TOR_OTHER_CZ_FIPS,-TOR_OTHER_CZ_NAME,-BEGIN_RANGE,-BEGIN_AZIMUTH,-BEGIN_LOCATION,-END_RANGE,-END_AZIMUTH,-END_LOCATION,-EPISODE_NARRATIVE,-EVENT_NARRATIVE,-DATA_SOURCE,-WFO,-YEAR)
+StormEvents_2020 <- StormEvents_2020|>
+  select(-CZ_TYPE,-CZ_NAME,-TOR_F_SCALE, -TOR_LENGTH,-TOR_WIDTH,-TOR_OTHER_WFO,-TOR_OTHER_CZ_STATE,-TOR_OTHER_CZ_FIPS,-TOR_OTHER_CZ_NAME,-BEGIN_RANGE,-BEGIN_AZIMUTH,-BEGIN_LOCATION,-END_RANGE,-END_AZIMUTH,-END_LOCATION,-EPISODE_NARRATIVE,-EVENT_NARRATIVE,-DATA_SOURCE,-WFO,-YEAR)
 ```
 
 
@@ -136,23 +139,23 @@ FiltStormEvents2020 <- FiltStormEvents2020|>
 Next, we took all these individual CSVs and combined them into one. This is also set to not run since the original CSVs are not loaded.
 
 ```{r bind_dfs, eval=FALSE}
-storms <- rbind(FiltStormEvents2010,
-                FiltStormEvents2011,
-                FiltStormEvents2012,
-                FiltStormEvents2013,
-                FiltStormEvents2014,
-                FiltStormEvents2015,
-                FiltStormEvents2016,
-                FiltStormEvents2017,
-                FiltStormEvents2018,
-                FiltStormEvents2019,
-                FiltStormEvents2020)
-write_csv(storms, file="../data/storms.csv")
+storms <- rbind(StormEvents_2010,
+                StormEvents_2011,
+                StormEvents_2012,
+                StormEvents_2013,
+                StormEvents_2014,
+                StormEvents_2015,
+                StormEvents_2016,
+                StormEvents_2017,
+                StormEvents_2018,
+                StormEvents_2019,
+                StormEvents_2020)
+write_csv(storms, file="../data/storms2.csv")
 ```
 
 ```{r loadCSV, message=FALSE}
 # reload CSV because above chunks are eval=FALSE to avoid crashing Posit.
-storms <- read_csv("../data/storms.csv")
+storms <- read_csv("../data/storms2.csv")
 ```
 
 ### Step 3: General Data Cleaning
@@ -329,7 +332,7 @@ scale_fill_brewer(palette = "Set2")
 ### Plot 4: ___________ 
 
 
-```{r leaflet}
+```{r leaflet_interactive}
 #crosstalk code from https://stackoverflow.com/questions/62849300/r-leaflet-add-a-range-slider-to-filter-markers-without-shiny
 
 map_storms <- storms|>
@@ -357,13 +360,44 @@ tagList(
   leaflet_map)
 ```
 
-
-```{r}
-storms_location <- storms|>
-  filter(!is.na(END_LON))|>
-  count(EVENT_TYPE)
-
-view(storms_location)
+```{r just_long_and_lat, eval=FALSE}
+coord <- storms|>
+  filter(EVENT_TYPE == "Tornado")|>
+  select(BEGIN_LAT, BEGIN_LON, BEGIN_YEAR, STATE)
+view(coord)
 ```
+
+
+```{r take_2, eval=FALSE}
+counties <- counties(state = NULL, cb = TRUE, class = "sf")
+
+coord_sf <- st_as_sf(coord, coords = c("BEGIN_LON", "BEGIN_LAT"), crs = st_crs(us_counties_sf))
+
+tornados_map <- st_join(coord_sf, counties, join = st_intersects)
+```
+
+
+```{r point_count, eval=FALSE}
+real_county_count <- tornados_map|> 
+  count(GEOID, name = "point_count")
+
+county_map <- map_data('county')|>
+  mutate(county_fips_name = paste(region, subregion, sep = ","))
+
+```
+
+
+```{r leaflet_tornado_density, eval=FALSE}
+ggplot(data=county_map, aes(x=long, y=lat, fill=region, group=group)) + 
+  geom_polygon(color = "white", linewidth = 0.1) + 
+  guides(fill=FALSE)
+
+
+
+ 
+
+```
+
+
 
 
