@@ -360,41 +360,45 @@ tagList(
   leaflet_map)
 ```
 
-```{r just_long_and_lat, eval=FALSE}
-coord <- storms|>
+### Plot 5: ____
+
+#### Data Cleaning for Plot 5
+
+First, we filter to just tornado, then filter to only include the relevant columns. Finally, we combine two location identifiers, STATE_FIPS and CZ_FIPS. Those are numeric identifiers for each state and county. On the map, there is a column called GEOID, which is the STATE_FIPS followed by the CZ_FIPS. Combining them here allows us to pinpoint exacly what county each event happened in.
+
+```{r just_long_and_lat}
+#Take storms, make just tornados, create GEOID from FIPS
+T_coords <- storms|>
   filter(EVENT_TYPE == "Tornado")|>
-  select(BEGIN_LAT, BEGIN_LON, BEGIN_YEAR, STATE)
-view(coord)
+  select(BEGIN_LAT, BEGIN_LON, STATE, STATE_FIPS, CZ_FIPS)|>
+  mutate(CTY_FIPS = str_pad(CZ_FIPS, width = 3, side = "left", pad = "0"))|>
+  mutate(GEOID = paste0(STATE_FIPS, CTY_FIPS))
 ```
 
 
-```{r take_2, eval=FALSE}
-counties <- counties(state = NULL, cb = TRUE, class = "sf")
+```{r point_count}
+#Total tornados per county
+tornados_per <- T_coords|> 
+  count(GEOID, name = "T_count")
 
-coord_sf <- st_as_sf(coord, coords = c("BEGIN_LON", "BEGIN_LAT"), crs = st_crs(us_counties_sf))
+#create the map
+map <- map_data('county')|>
+  rename(NAME = subregion)
 
-tornados_map <- st_join(coord_sf, counties, join = st_intersects)
+#get data from tigris package abt counties, create GEOID from it
+geoid_df <- counties(state = NULL, cb = TRUE)|>
+  filter(!(STATEFP %in% c(2,15)))
+  #select(NAME, GEOID, -geometry)|>
+  #mutate(NAME = tolower(NAME))
+
 ```
 
-
-```{r point_count, eval=FALSE}
-real_county_count <- tornados_map|> 
-  count(GEOID, name = "point_count")
-
-county_map <- map_data('county')|>
-  mutate(county_fips_name = paste(region, subregion, sep = ","))
-
-```
-
-
-```{r leaflet_tornado_density, eval=FALSE}
-ggplot(data=county_map, aes(x=long, y=lat, fill=region, group=group)) + 
+```{r map_tornado_density}
+#from https://jtr13.github.io/cc19/different-ways-of-plotting-u-s-map-in-r.html
+ggplot(data=map, aes(x=long, y=lat, fill=region, group = group))+
   geom_polygon(color = "white", linewidth = 0.1) + 
   guides(fill=FALSE)
 
-
-
- 
 
 ```
 
