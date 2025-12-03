@@ -1,6 +1,6 @@
 ---
 title: "Project proposal"
-author: "Team Weather- Colin, Kailor & Jennifer"
+author: "Team Weather- Colin, Kailer & Jennifer"
 output: github_document
 ---
 
