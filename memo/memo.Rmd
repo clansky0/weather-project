@@ -331,31 +331,20 @@ scale_fill_brewer(palette = "Set2")
 
 
 ```{r leaflet_interactive, eval= FALSE}
-#crosstalk code from https://stackoverflow.com/questions/62849300/r-leaflet-add-a-range-slider-to-filter-markers-without-shiny
-
 map_storms <- storms|>
   filter(EVENT_TYPE %in% c("Tornado"))|>
   mutate(id = seq_len(n()))
 
-shared_data <- SharedData$new(map_storms, key = ~id, group = "tornado_events")
-
-#slider <- filter_slider("date", "Year", shared_data, ~BEGIN_YEAR, step = 1, ticks = FALSE, width = "90%", dragRange = FALSE, sep = NULL)
-
-slider <- filter_select("year_select", "Select Year", shared_data, ~BEGIN_YEAR, allLevels = TRUE, multiple = FALSE)
-
-leaflet_map <- leaflet(shared_data) %>%
+leaflet(map_storms) %>%
   addProviderTiles(provider = providers$OpenStreetMap) %>%
   addCircleMarkers(lng = ~BEGIN_LON, 
                   lat = ~BEGIN_LAT, 
                   popup = ~EVENT_TYPE,
                   color = "red",
-                  radius = 1,
+                  radius = 10,
                   opacity = 0.6,
-                  group = ~EVENT_TYPE)
-
-tagList(
-  slider,
-  leaflet_map)
+                  group = ~EVENT_TYPE,
+                  clusterOptions = markerClusterOptions())
 ```
 
 ### Plot 5: ____
@@ -428,7 +417,7 @@ geoid_df <- geoid_df|>
 
 ```{r join_tornado_map, message=FALSE, warning=FALSE}
 #Joins df w/ geoid + county info with tornado locations
-all_coords_geoid <- inner_join(geoid_df, T_coords)
+all_coords_geoid <- left_join(geoid_df, tornados_per)
 
 # counts the number of tornados per county
 coords_geoid <- all_coords_geoid|>
@@ -436,21 +425,21 @@ coords_geoid <- all_coords_geoid|>
 
 #adds the number of tornados per county back to full df
 all_coords_geoid <- inner_join(all_coords_geoid, coords_geoid)|>
-  select(GEOID, CZ_ST, n)
+  select(GEOID, CZ_ST, T_count)
 
 #adds number of tornados to map df
-map_n <- inner_join(all_coords_geoid, map)
+map_n <- right_join(all_coords_geoid, map)
 ```
 
 ```{r map_tornado_density}
 #from https://jtr13.github.io/cc19/different-ways-of-plotting-u-s-map-in-r.html
-ggplot(data=map_n, aes(x=long, y=lat, fill=n, group = group))+
-  geom_polygon(color = "black", linewidth = 0.1) + 
+ggplot(data=map_n, aes(x=long, y=lat, fill = T_count, group = group))+
+  geom_polygon(color = "black", linewidth = 0.01) + 
   theme(
     legend.position = c(.9,.2),
     axis.title = element_blank(),
     axis.text = element_blank(),
-    panel.grid = element_blank())+
-  scale_fill_distiller(palette = "RdPu")
+    panel.grid = element_blank())
+  #scale_fill_distiller(palette = "greens")
 ```
 
