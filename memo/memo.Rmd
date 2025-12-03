@@ -236,25 +236,25 @@ casualties_storms <- left_join(storm_casualties, storms_by_year)
 
 To add in the total damage cost, we must reformat the way the cost is written. In the dataset, cost is abbreviated with K for thousand, and values with no damage are a mix between 0.00K and NA. Here, we rewrite the cost to a usable format and set all NA and 0.00K values to 0. Then, we join the casualty and cost dataframes.
 
-```{r total_damage_NA}
+```{r convert_to_numeric}
 #Replace NA with 0
-storm_damages <- storms
-storm_damages$DAMAGE_PROPERTY[is.na(storm_damages$DAMAGE_PROPERTY)] <- 0
-storm_damages$DAMAGE_CROPS[is.na(storm_damages$DAMAGE_CROPS)] <- 0
-```
+storm_damages <- storms |>
+  mutate(
+    CROPS_NUM = case_when(
+      grepl("B", DAMAGE_CROPS, ignore.case = TRUE) ~ as.numeric(gsub("[B]", "", DAMAGE_CROPS, ignore.case = TRUE)) * 1e9 / 1e7,
+      grepl("M", DAMAGE_CROPS, ignore.case = TRUE) ~ as.numeric(gsub("[M]", "", DAMAGE_CROPS, ignore.case = TRUE)) * 1e6 / 1e7,
+      grepl("K", DAMAGE_CROPS, ignore.case = TRUE) ~ as.numeric(gsub("[K]", "", DAMAGE_CROPS, ignore.case = TRUE)) * 1e3) / 1e7,
+    
+    # 2. Convert Property Damage (PROP_NUM)
+    PROP_NUM = case_when(
+      grepl("B", DAMAGE_PROPERTY, ignore.case = TRUE) ~ as.numeric(gsub("[B]", "", DAMAGE_PROPERTY, ignore.case = TRUE)) * 1e9 / 1e7,
+      grepl("M", DAMAGE_PROPERTY, ignore.case = TRUE) ~ as.numeric(gsub("[M]", "", DAMAGE_PROPERTY, ignore.case = TRUE)) * 1e6 / 1e7,
+      grepl("K", DAMAGE_PROPERTY, ignore.case = TRUE) ~ as.numeric(gsub("[K]", "", DAMAGE_PROPERTY, ignore.case = TRUE)) * 1e3 / 1e7,
+      TRUE ~ as.numeric(DAMAGE_PROPERTY)))|>
+select(BEGIN_YEAR, CROPS_NUM, PROP_NUM, DAMAGE_PROPERTY, DAMAGE_CROPS, EVENT_ID)
 
-```{r total_damage_cost}
-# Convert crop damage to numeric
-storm_damages$CROPS_NUM <- numeric(length(storm_damages$DAMAGE_CROPS))
-k_rows <- grepl("K", storm_damages$DAMAGE_CROPS)
-storm_damages$CROPS_NUM[k_rows] <- as.numeric(gsub("K", "", storm_damages$DAMAGE_CROPS[k_rows])) / 100
-```
-
-```{r damage_to_numeric}
-# Convert property damage to numeric
-storm_damages$PROP_NUM <- numeric(length(storm_damages$DAMAGE_PROPERTY))
-k_rows <- grepl("K", storm_damages$DAMAGE_PROPERTY)
-storm_damages$PROP_NUM[k_rows] <- as.numeric(gsub("K", "", storm_damages$DAMAGE_PROPERTY[k_rows])) / 100
+storm_damages$PROP_NUM[is.na(storm_damages$PROP_NUM)] <- 0
+storm_damages$CROPS_NUM[is.na(storm_damages$CROPS_NUM)] <- 0
 ```
 
 ```{r total_damage_sum}
@@ -271,7 +271,7 @@ casualties_storms <- left_join(casualties_storms, storm_damages)
 
 #### Final Plot 2
 
-```{r storms_and_injuries, fig.alt = "A time-series chart with multiple lines showing annual trends in extreme weather events from 2010 to 2020. The x-axis shows year, and the y-axis shows counts or scaled values. Three lines are displayed: black for the number of storms, purple for injuries and fatalities, and green for damage costs in $100k units. Points mark yearly values. The chart compares storm frequency with human and economic impacts to indicate potential severity. We show that there isn't really a correlation between frequency and severity as there isn't a direct increase in frequency from 2010-2020."}
+```{r storms_and_injuries, fig.alt = "A time-series chart with multiple lines showing annual trends in extreme weather events from 2010 to 2020. The x-axis shows year, and the y-axis shows counts or scaled values. Three lines are displayed: blue for the number of storms, black for injuries and fatalities, and green for damage costs in $10M units. Points mark yearly values. The chart compares storm frequency with human and economic impacts to indicate potential severity. There isn't a strong correlation between frequency and severity as there isn't a direct increase in frequency from 2010-2020."}
 
 ggplot(casualties_storms, aes(BEGIN_YEAR)) +
   geom_line(aes(y = n_events, color = "orange")) +
@@ -289,17 +289,14 @@ ggplot(casualties_storms, aes(BEGIN_YEAR)) +
   ) +
   theme_minimal()+
   scale_color_manual(
-    values = c("orange" = "black", "red" = "purple", "green" = "#00cd00"),
+    values = c("orange" = "#1f66e5", "red" = "black", "green" = "#00cd00"),
     labels = c("orange" = "# of storms",
                "red" = "Injures + Fatalities",
-               "green" = "Damages (in $100k)"))+
+               "green" = "Damages (in $10M)"))+
   scale_x_continuous(breaks = c(2010,2012,2014,2016,2018,2020))
-#ggsave("storms_injuries_cost.png")
+ggsave("storms_injuries_cost2.png")
 
 ```
-
-
-
 
 
 ### Plot 3: Final Plot 3
