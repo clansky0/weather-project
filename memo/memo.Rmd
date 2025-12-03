@@ -363,7 +363,7 @@ T_coords <- storms|>
   mutate(GEOID = paste0(STATE_FIPS, CZ_FIPS))
 ```
 
-```{r point_count, message=FALSE, warning=FALSE}
+```{r point_count, message=FALSE, warning=FALSE, message=FALSE}
 #Total tornados per county
 tornados_per <- T_coords|> 
   count(GEOID, name = "T_count")
@@ -373,7 +373,7 @@ map <- map_data('county')|>
   rename(NAME = subregion)
 
 #get data from tigris package abt counties, have GEOID and county name
-geoid_df <- counties(state = NULL, cb = TRUE)|>
+geoid_df <- counties(state = NULL, cb = TRUE, progress_bar = FALSE)|>
   #remove states not in continental US
   #I CHECKED THIS IS NOT THE COUNTY ISSUE
  # filter(!(STATEFP %in% c("02",15,03,07,14,43,52,64,68,70,74,81,84,
@@ -382,7 +382,9 @@ geoid_df <- counties(state = NULL, cb = TRUE)|>
   mutate(NAME = tolower(NAME))|>
   mutate(STATE_NAME = tolower(STATE_NAME))|>
   st_drop_geometry(geoid_df)
+```
 
+```{r clean-counties}
 # Fix connecticut counties  
 geoid_df[geoid_df == "western connecticut"] <- "fairfield"
 geoid_df[geoid_df == "southeastern connecticut"] <- "new london"
@@ -405,6 +407,7 @@ geoid_df[geoid_df == "09170"] <- "09009"
 geoid_df[geoid_df == "09180"] <- "09011"
 geoid_df[geoid_df == "09190"] <- "09001"
 
+# since some counties are combined into 1 district
 geoid_df <- unique(geoid_df)
 
 #since many counties have same name, create new state county name
@@ -414,6 +417,7 @@ map <- map|>
 geoid_df <- geoid_df|>
   mutate(CZ_ST = paste(NAME, STATE_NAME, sep = ","))
 ```
+
 
 ```{r join_tornado_map, message=FALSE, warning=FALSE}
 #Joins df w/ geoid + county info with tornado locations
@@ -429,6 +433,12 @@ all_coords_geoid <- inner_join(all_coords_geoid, coords_geoid)|>
 
 #adds number of tornados to map df
 map_n <- right_join(all_coords_geoid, map)
+
+
+#in new df, replace NA counties with 0
+map_n <- map_n|>
+  mutate(T_count = ifelse(is.na(T_count), 0, T_count))
+
 ```
 
 ```{r map_tornado_density}
@@ -439,7 +449,15 @@ ggplot(data=map_n, aes(x=long, y=lat, fill = T_count, group = group))+
     legend.position = c(.9,.2),
     axis.title = element_blank(),
     axis.text = element_blank(),
-    panel.grid = element_blank())
-  #scale_fill_distiller(palette = "greens")
+    panel.grid = element_blank())+
+  scale_fill_viridis_c(
+    trans=scales::pseudo_log_trans(base = 10),
+    breaks = c(0,5,10,20,30,50)
+  )+
+  labs(
+    title = "Number of tornados per county 2010-2020",
+    fill = "Quantity"
+    
+  )
 ```
 
