@@ -371,7 +371,7 @@ tagList(
 
 First, we filter to just tornado, then filter to only include the relevant columns. Finally, we combine two location identifiers, STATE_FIPS and CZ_FIPS. Those are numeric identifiers for each state and county. On the map, there is a column called GEOID, which is the STATE_FIPS followed by the CZ_FIPS. Combining them here allows us to pinpoint exacly what county each event happened in.
 
-```{r just_long_and_lat, eval= FALSE}
+```{r just_long_and_lat}
 #Take storms, make just tornados, create GEOID from FIPS
 T_coords <- storms|>
   filter(EVENT_TYPE == "Tornado")|>
@@ -381,12 +381,7 @@ T_coords <- storms|>
   mutate(GEOID = paste0(STATE_FIPS, CZ_FIPS))
 ```
 
-
-<<<<<<< HEAD
-```{r point_count, eval= FALSE}
-=======
 ```{r point_count, message=FALSE, warning=FALSE}
->>>>>>> e466df43bc8ffe35cbbb9264e25aa9ca1cf3594b
 #Total tornados per county
 tornados_per <- T_coords|> 
   count(GEOID, name = "T_count")
@@ -416,7 +411,6 @@ geoid_df[geoid_df == "capitol"] <- "hartford"
 geoid_df[geoid_df == "northwest hills"] <- "litchfield"
 
 #Fix connecticut GEOID
-#must also fix geoid in T_coords later too
 geoid_df[geoid_df == "09110"] <- "09003"
 geoid_df[geoid_df == "09120"] <- "09001"
 geoid_df[geoid_df == "09130"] <- "09007"
@@ -437,7 +431,7 @@ geoid_df <- geoid_df|>
   mutate(CZ_ST = paste(NAME, STATE_NAME, sep = ","))
 ```
 
-```{r join_tornado_map}
+```{r join_tornado_map, message=FALSE, warning=FALSE}
 #Joins df w/ geoid + county info with tornado locations
 all_coords_geoid <- inner_join(geoid_df, T_coords)
 
@@ -449,24 +443,21 @@ coords_geoid <- all_coords_geoid|>
 all_coords_geoid <- inner_join(all_coords_geoid, coords_geoid)|>
   select(GEOID, CZ_ST, n)
 
+#adds number of tornados to map df
 map_n <- inner_join(all_coords_geoid, map)
 ```
 
-<<<<<<< HEAD
-```{r map_tornado_density, eval= FALSE}
-=======
-
-
 ```{r map_tornado_density}
->>>>>>> e466df43bc8ffe35cbbb9264e25aa9ca1cf3594b
 #from https://jtr13.github.io/cc19/different-ways-of-plotting-u-s-map-in-r.html
 ggplot(data=map_n, aes(x=long, y=lat, fill=n, group = group))+
   geom_polygon(color = "black", linewidth = 0.1) + 
-  guides(fill=FALSE)
+  guides(fill=FALSE)+
+  theme(
+    axis.title = element_blank(),
+    axis.text = element_blank(),
+    panel.grid = element_blank()
+  )
 
 
 ```
-
-
-
 
