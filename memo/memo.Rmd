@@ -271,7 +271,8 @@ casualties_storms <- left_join(casualties_storms, storm_damages)
 
 #### Final Plot 2
 
-```{r storms_and_injuries}
+```{r storms_and_injuries, fig.alt = "A time-series chart with multiple lines showing annual trends in extreme weather events from 2010 to 2020. The x-axis shows year, and the y-axis shows counts or scaled values. Three lines are displayed: black for the number of storms, purple for injuries and fatalities, and green for damage costs in $100k units. Points mark yearly values. The chart compares storm frequency with human and economic impacts to indicate potential severity. We show that there isn't really a correlation between frequency and severity as there isn't a direct increase in frequency from 2010-2020."}
+
 ggplot(casualties_storms, aes(BEGIN_YEAR)) +
   geom_line(aes(y = n_events, color = "orange")) +
   geom_line(aes(y = casualties_year, color = "red"))+
@@ -297,6 +298,10 @@ ggplot(casualties_storms, aes(BEGIN_YEAR)) +
 
 ```
 
+
+
+
+
 ### Plot 3: Final Plot 3
 
 #### Data Cleaning for Plot 3
@@ -309,7 +314,7 @@ storms_by_type_year <- storms |>
 
 #### Final Plot 3
 
-```{r by_storm_type}
+```{r storm_type, fig.alt = "A time-series chart with multiple lines showing annual trends in extreme weather events from 2010 to 2020. The x-axis shows year, and the y-axis shows counts or scaled values. Below the line graph is colored indicating how much of each weather event occured over each year. Droughts and Flash Floods occure the most with wildfires and tropical storms taking up the least."}
 ggplot(storms_by_type_year,
 aes(x = BEGIN_YEAR,
 y = n_events,
@@ -332,7 +337,7 @@ scale_fill_brewer(palette = "Set2")
 ### Plot 4: ___________ 
 
 
-```{r leaflet_interactive}
+```{r leaflet_interactive, eval= FALSE}
 #crosstalk code from https://stackoverflow.com/questions/62849300/r-leaflet-add-a-range-slider-to-filter-markers-without-shiny
 
 map_storms <- storms|>
@@ -366,7 +371,7 @@ tagList(
 
 First, we filter to just tornado, then filter to only include the relevant columns. Finally, we combine two location identifiers, STATE_FIPS and CZ_FIPS. Those are numeric identifiers for each state and county. On the map, there is a column called GEOID, which is the STATE_FIPS followed by the CZ_FIPS. Combining them here allows us to pinpoint exacly what county each event happened in.
 
-```{r just_long_and_lat}
+```{r just_long_and_lat, eval= FALSE}
 #Take storms, make just tornados, create GEOID from FIPS
 T_coords <- storms|>
   filter(EVENT_TYPE == "Tornado")|>
@@ -376,7 +381,7 @@ T_coords <- storms|>
 ```
 
 
-```{r point_count}
+```{r point_count, eval= FALSE}
 #Total tornados per county
 tornados_per <- T_coords|> 
   count(GEOID, name = "T_count")
@@ -393,7 +398,7 @@ geoid_df <- counties(state = NULL, cb = TRUE)|>
 
 ```
 
-```{r map_tornado_density}
+```{r map_tornado_density, eval= FALSE}
 #from https://jtr13.github.io/cc19/different-ways-of-plotting-u-s-map-in-r.html
 ggplot(data=map, aes(x=long, y=lat, fill=region, group = group))+
   geom_polygon(color = "white", linewidth = 0.1) + 
