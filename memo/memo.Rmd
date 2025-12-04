@@ -14,8 +14,6 @@ library(broom)
 library(lubridate)
 library(RColorBrewer)
 library(leaflet)
-library(crosstalk)
-library(htmltools)
 library(sf)
 library(mapdata)
 library(tigris)
@@ -184,6 +182,8 @@ storms <- storms|>
 
 ### Plot 1: Frequency of storms by year
 
+First, we wanted to see if there was any trend in the number of extreme weather events by year, so we created a line plot from 2010 - 2020. There were no strong trend - the number of storms did not increase in any consistant way in this range.
+
 #### Data cleanup steps specific to plot 1
 
 We create a new dataframe for this plot, and count the number of storms per year.
@@ -212,6 +212,8 @@ ggplot(storms_by_year, aes(x = BEGIN_YEAR, y = n_events)) +
 
 ### Plot 2: Frequency of storms and fatalities by year
 
+Since there was no strong trend in the total number of storms, next we wanted to see if there was any increase in the total number of fatalities, injuries, or damage cost. We assumed this could be a metric for the severity of the storms. However, there was no strong trend in this either.
+
 #### Data cleaning for Plot 2
 
 First, we sum the indirect and direct injuries and deaths into one column, casualties, and merge that data frame with the storms by year dataset.
@@ -232,10 +234,9 @@ casualties_storms <- left_join(storm_casualties, storms_by_year)
 
 ```
   
-
 To add in the total damage cost, we must reformat the way the cost is written. In the dataset, cost is abbreviated with K for thousand, and values with no damage are a mix between 0.00K and NA. Here, we rewrite the cost to a usable format and set all NA and 0.00K values to 0. Then, we join the casualty and cost dataframes.
 
-```{r convert_to_numeric}
+```{r convert_to_numeric, message=FALSE, warning=FALSE}
 #Replace NA with 0
 storm_damages <- storms |>
   mutate(
@@ -298,8 +299,12 @@ ggplot(casualties_storms, aes(BEGIN_YEAR)) +
 
 ### Plot 3: Final Plot 3
 
+Since there was no strong trend with the total number of weather events, next we wanted to look and see if there was a trend with specific types of storms. Here, we create a stacked line graph of all the different common categories of storms. We see that there was an increase depending on the type of storm, notably floods increased dramatically from 2010-2020.
+
 #### Data Cleaning for Plot 3
-Here, we count 
+
+Here, we count the total number of events of each storm type, then plot the graph.
+
 ```{r filter_by_type_plot}
 storms_by_type_year <- storms |>
   count(BEGIN_YEAR, EVENT_TYPE, name = "n_events")|>
@@ -327,10 +332,13 @@ scale_fill_brewer(palette = "Set2")
 
 ```
 
-### Plot 4: ___________ 
+### Plot 4: Interactive Map of All Tornado Locations
 
+From the previous plot, we noticed there were very consistent number of tornadoes through the years. We also had the exact location for all the tornadoes. So, we created a leaflet to take note of all the locations of these storms. However, the leaflet was not very informative which led to the creation of plot 5.
 
-```{r leaflet_interactive, eval= FALSE}
+#### Plot 4
+
+```{r leaflet_interactive, fig.alt= "An interactive map showing the number of tornadoes in the United States. Tornadoes occur across the entire country, including Hawaii and Puerto Rico, but are most common in the midwest and deep south."}
 map_storms <- storms|>
   filter(EVENT_TYPE %in% c("Tornado"))|>
   mutate(id = seq_len(n()))
@@ -347,14 +355,16 @@ leaflet(map_storms) %>%
                   clusterOptions = markerClusterOptions())
 ```
 
-### Plot 5: ____
+### Plot 5: Number of Tornadoes per County
+
+To improve on the leaflet, we wanted to see the number of tornadoes per county. So, after a lot of data cleaning and combining with the TIGRIS US Census dataset, we accomplish this. This map shows tornadoes are primarily concentrated to specific counties in the US, especially in the south and midwest.
 
 #### Data Cleaning for Plot 5
 
-First, we filter to just tornado, then filter to only include the relevant columns. Finally, we combine two location identifiers, STATE_FIPS and CZ_FIPS. Those are numeric identifiers for each state and county. On the map, there is a column called GEOID, which is the STATE_FIPS followed by the CZ_FIPS. Combining them here allows us to pinpoint exacly what county each event happened in.
+First, we filter to just tornado, then filter to only include the relevant columns. Finally, we combine two location identifiers, STATE_FIPS and CZ_FIPS. Those are numeric identifiers for each state and county. On the map, there is a column called GEOID, which is the STATE_FIPS followed by the CZ_FIPS. Combining them here allows us to pinpoint exactly what county each event happened in.
 
 ```{r just_long_and_lat}
-#Take storms, make just tornados, create GEOID from FIPS
+#Take storms, make just tornadoes, create GEOID from FIPS
 T_coords <- storms|>
   filter(EVENT_TYPE == "Tornado")|>
   select(BEGIN_LAT, BEGIN_LON, STATE, STATE_FIPS, CZ_FIPS)|>
@@ -363,9 +373,11 @@ T_coords <- storms|>
   mutate(GEOID = paste0(STATE_FIPS, CZ_FIPS))
 ```
 
-```{r point_count, message=FALSE, warning=FALSE, message=FALSE}
-#Total tornados per county
-tornados_per <- T_coords|> 
+Next, we download the map from the TIGRIS package, create the map df, and remove states not in the continental US.
+
+```{r point_count, message=FALSE, warning=FALSE}
+#Total tornadoes per county
+tornadoes_per <- T_coords|> 
   count(GEOID, name = "T_count")
 
 #create the map
@@ -375,14 +387,15 @@ map <- map_data('county')|>
 #get data from tigris package abt counties, have GEOID and county name
 geoid_df <- counties(state = NULL, cb = TRUE, progress_bar = FALSE)|>
   #remove states not in continental US
-  #I CHECKED THIS IS NOT THE COUNTY ISSUE
- # filter(!(STATEFP %in% c("02",15,03,07,14,43,52,64,68,70,74,81,84,
-        #                  86,67,89,71,76,95,79,60,66,69,72,78)))|>
+ filter(!(STATEFP %in% c("02",15,03,07,14,43,52,64,68,70,74,81,84,
+                          86,67,89,71,76,95,79,60,66,69,72,78)))|>
   select(NAME, GEOID, STATEFP, STATE_NAME)|>
   mutate(NAME = tolower(NAME))|>
   mutate(STATE_NAME = tolower(STATE_NAME))|>
   st_drop_geometry(geoid_df)
 ```
+
+Connecticut does not have counties, instead it has planning regions. The TIGIRS dataset records these planning regions, because this is what the US Census does, while the map has counties. To fix this, we rename all the counties in Connecticut, and change their GEOID as well. Also, many counties in other states have the same name so we create a new column with the state and county name combined. 
 
 ```{r clean-counties}
 # Fix connecticut counties  
@@ -418,20 +431,21 @@ geoid_df <- geoid_df|>
   mutate(CZ_ST = paste(NAME, STATE_NAME, sep = ","))
 ```
 
+Finally, we join the county information with the tornadoes df using their GEOID, then count the number of tornadoes per county. Then, we join this result with the original dataframe, and add this to the map dataframe. Finally we change the value for all counties with no tornadoes from NA to 0.
 
 ```{r join_tornado_map, message=FALSE, warning=FALSE}
 #Joins df w/ geoid + county info with tornado locations
-all_coords_geoid <- left_join(geoid_df, tornados_per)
+all_coords_geoid <- left_join(geoid_df, tornadoes_per)
 
-# counts the number of tornados per county
+# counts the number of tornadoes per county
 coords_geoid <- all_coords_geoid|>
   count(GEOID, sort = TRUE)
 
-#adds the number of tornados per county back to full df
+#adds the number of tornadoes per county back to full df
 all_coords_geoid <- inner_join(all_coords_geoid, coords_geoid)|>
   select(GEOID, CZ_ST, T_count)
 
-#adds number of tornados to map df
+#adds number of tornadoes to map df
 map_n <- right_join(all_coords_geoid, map)
 
 
@@ -441,7 +455,9 @@ map_n <- map_n|>
 
 ```
 
-```{r map_tornado_density}
+#### Final Plot 5: Map of Tornadoes per County 
+
+```{r map_tornado_density, fig.alt= "A map of the continental United States showing the quantity of tornados per county by color. The minimum is 0 in many counties in the west, northeast, and applachia. There is a maximum of 50 in 1 colorado county. Most tornadoes occur in the deep south and midwest."}
 #from https://jtr13.github.io/cc19/different-ways-of-plotting-u-s-map-in-r.html
 ggplot(data=map_n, aes(x=long, y=lat, fill = T_count, group = group))+
   geom_polygon(color = "black", linewidth = 0.01) + 
@@ -458,10 +474,9 @@ ggplot(data=map_n, aes(x=long, y=lat, fill = T_count, group = group))+
     breaks = c(0,5,10,20,50)
   )+
   labs(
-    title = "Number of tornados per county",
+    title = "Number of tornadoes per county",
     fill = "Quantity",
     subtitle = "NOAA data from 2010-2020"
   )
-
 ```
 
