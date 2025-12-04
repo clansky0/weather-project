@@ -1,4 +1,4 @@
-## Have the Number of Extreme Weather Events Increased Over the Past Decade? (2010-2020)
+Have the Number of Extreme Weather Events Increased Over the Past Decade? (2010-2020)
 ================
 by Team Weather - Colin, Kailer, Jennifer
 
