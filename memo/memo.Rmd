@@ -455,9 +455,9 @@ ggplot(data=map_n, aes(x=long, y=lat, fill = T_count, group = group))+
     breaks = c(0,5,10,20,30,50)
   )+
   labs(
-    title = "Number of tornados per county 2010-2020",
-    fill = "Quantity"
-    
+    title = "Number of tornados per county",
+    fill = "Quantity",
+    subtitle = "NOAA data from 2010-2020"
   )
 ```
 
