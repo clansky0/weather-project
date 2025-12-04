@@ -1,18 +1,13 @@
-## Have the Number of Extreme Weather Events Increased Over the Past Decade? (2010-2020)
-
+Have the Number of Extreme Weather Events Increased Over the Past Decade? (2010-2020)
 ================
 by Team Weather - Colin, Kailer, Jennifer
 
+
 ## Summary
 
-Write-up of your project and findings go here. Think of this as the text
-of your handout. The length should be roughly 5 minutes when read
-out loud. Although pacing varies, a 5-minute speech is roughly 750
-words. 
+As climate change becomes an increasingly urgent global concern, understanding its influence on extreme weather patterns is essential. This study investigates how the frequency of extreme weather events has shifted over time and identifies which specific types of events have become more or less common. To further evaluate the severity of these events, we also analyze associated economic impacts by examining recorded damage costs. We used data from NOAA (National Oceanic and Atmospheric Association) for the years 2010–2020.
 
-Your results with proper output and
-graphics go in your handout, this space is for a brief summary of
-your project.
+CONTINUE
 
 ## Handout
 
@@ -24,12 +19,9 @@ A link to the code and how we created our graphics in our memo can be found [her
 
 ## Data
 
-Include a citation for your data here. See
-<http://libraryguides.vu.edu.au/c.php?g=386501&p=4347840> for guidance
-on proper citation for datasets. If you got your data off the web, make
-sure to note the retrieval date.
+Our data is from the NOAA Storm Events Database, v3.1.
 
 ## References
 
-List any references here. You should, at a minimum, list your data
-source.
+National Centers for Environmental Information. Storm Events Database. National Oceanic and Atmospheric Administration, June, 2025, Washington DC. https://www.ncei.noaa.gov/stormevents/
+
