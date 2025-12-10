@@ -612,34 +612,6 @@ all_storms <- rbind(StormEvents_1950,
 write_csv(all_storms, file="../data/ignore/all-storms.csv")
 ```
 
-```{r reporting-by-year}
-all_storms <- read_csv("../data/ignore/all-storms.csv")
-
-storms_per_year <- all_storms|>
-  select(YEAR, EVENT_TYPE)|>
-  group_by(YEAR)|>
-  count(EVENT_TYPE, sort = TRUE)|>
-  mutate(min_year = min(YEAR))
-
-
-#view(storms_per_year)
-
-storms_per_year|>
-  ggplot(aes(y = reorder(EVENT_TYPE, -min_year), x = YEAR)) + 
-  geom_boxplot()
-
-```
-
-```{r most_common}
-most_common <- all_storms|>
-  select(YEAR, EVENT_TYPE)|>
-  count(EVENT_TYPE, sort = TRUE)
-
-view(most_common)
-```
-
-
-
 ```{r earliest}
 
 earliest_storms <- all_storms|>

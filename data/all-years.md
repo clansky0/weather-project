@@ -1423,50 +1423,6 @@ write_csv(all_storms, file="../data/ignore/all-storms.csv")
 ```
 
 ``` r
-all_storms <- read_csv("../data/ignore/all-storms.csv")
-```
-
-    ## Warning: One or more parsing issues, call `problems()` on your data frame for details,
-    ## e.g.:
-    ##   dat <- vroom(...)
-    ##   problems(dat)
-
-    ## Rows: 975284 Columns: 29
-    ## ── Column specification ────────────────────────────────────────────────────────
-    ## Delimiter: ","
-    ## chr  (9): STATE, MONTH_NAME, EVENT_TYPE, DAMAGE_PROPERTY, DAMAGE_CROPS, SOUR...
-    ## dbl (18): BEGIN_YEARMONTH, BEGIN_DAY, BEGIN_TIME, END_YEARMONTH, END_DAY, EN...
-    ## lgl  (2): CATEGORY, TOR_OTHER_CZ_STATE
-    ## 
-    ## ℹ Use `spec()` to retrieve the full column specification for this data.
-    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-
-``` r
-storms_per_year <- all_storms|>
-  select(YEAR, EVENT_TYPE)|>
-  group_by(YEAR)|>
-  count(EVENT_TYPE, sort = TRUE)|>
-  mutate(min_year = min(YEAR))
-
-
-#view(storms_per_year)
-
-storms_per_year|>
-  ggplot(aes(y = reorder(EVENT_TYPE, -min_year), x = YEAR)) + 
-  geom_boxplot()
-```
-
-![](all-years_files/figure-gfm/reporting-by-year-1.png)<!-- -->
-
-``` r
-most_common <- all_storms|>
-  select(YEAR, EVENT_TYPE)|>
-  count(EVENT_TYPE, sort = TRUE)
-
-view(most_common)
-```
-
-``` r
 earliest_storms <- all_storms|>
   select(YEAR, EVENT_TYPE)|>
   group_by(EVENT_TYPE)|>
