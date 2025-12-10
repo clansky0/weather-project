@@ -40,38 +40,7 @@ ggplot(tornadoes_per_year, aes(x = YEAR, y = n_events)) +
 
 ```
 
-```{r tornado-type-cleaning}
-
-tornado_scale <- tornadoes |>
-  select(YEAR, TOR_F_SCALE)|>
-  group_by(TOR_F_SCALE, YEAR)|>
-  count(TOR_F_SCALE, name = "n_events")|>
-  filter(!(TOR_F_SCALE == "EFU"))|>
-  arrange(YEAR)
-
-tornado_scale <- na.omit(tornado_scale)
-tornado_scale[tornado_scale == "F0"] <- "EF0"
-tornado_scale[tornado_scale == "F1"] <- "EF1"
-tornado_scale[tornado_scale == "F2"] <- "EF2"
-tornado_scale[tornado_scale == "F3"] <- "EF3"
-tornado_scale[tornado_scale == "F4"] <- "EF4"
-tornado_scale[tornado_scale == "F5"] <- "EF5"
 
 
 
-```
 
-
-
-```{r tornadoes_by_category}
-ggplot(tornado_scale, aes(x = YEAR, y = n_events, fill = TOR_F_SCALE)) +
-  geom_density_ridges() +
-  labs(
-    title = "Number of tornadoes in the US per year (1950-2024)",
-    subtitle = "Filtered to major natural disasters",
-    x = "Year",
-    y = "Number of Events"
-  ) +
-  theme_minimal()
-  #scale_y_continuous(trans=scales::pseudo_log_trans(base = 20))
-```
