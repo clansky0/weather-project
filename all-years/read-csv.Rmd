@@ -752,7 +752,11 @@ all_storms <- rbind(StormEvents_1950,
                     StormEvents_2017,
                     StormEvents_2018,
                     StormEvents_2019,
-                    StormEvents_2020)
+                    StormEvents_2020,
+                    StormEvents_2021,
+                    StormEvents_2022,
+                    StormEvents_2023,
+                    StormEvents_2024)
 write_csv(all_storms, file="../data/ignore/all-storms.csv")
 ```
 
@@ -772,6 +776,9 @@ all_storms <- all_storms|>
                             "Astronomical Low Tide", "Freezing Fog", "Tropical Depression", 
                             "Avalanche", "Dust Storm", "Sleet", "Debris Flow", "Rip Current" ,
                             "Lake-Effect Snow", "Storm Surge/Tide", "Sneakerwave",""))
+
+write_csv(all_storms, file="../data/ignore/all-storms.csv")
+
 
 all_storms|>
   count(EVENT_TYPE)|>
