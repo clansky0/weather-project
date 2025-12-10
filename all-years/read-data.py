@@ -1,6 +1,6 @@
 
 #create code chunks for each year to read csv
-for i in range(60):
+for i in range(75):
   year = i + 1950
   print('```{r ', year, '}', sep = '')
   print ('StormEvents_', year, ' <- read_csv("../data/ignore/StormEvents_details-ftp_v1.0_d',year,'_c20250520.csv")', sep = '')

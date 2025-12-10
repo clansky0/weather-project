@@ -546,7 +546,140 @@ select (-EPISODE_ID, -CZ_TYPE, -CZ_FIPS, -CZ_NAME, -WFO, -BEGIN_DATE_TIME, -CZ_T
 -END_LOCATION, -EPISODE_NARRATIVE, -EVENT_NARRATIVE)
 ```
 
+```{r 2010}
+StormEvents_2010 <- read_csv("../data/ignore/StormEvents_details-ftp_v1.0_d2010_c20250520.csv")
+StormEvents_2010 <- StormEvents_2010|>
+select (-EPISODE_ID, -CZ_TYPE, -CZ_FIPS, -CZ_NAME, -WFO, -BEGIN_DATE_TIME, -CZ_TIMEZONE,
+-END_DATE_TIME, -MAGNITUDE_TYPE, -TOR_LENGTH, -TOR_WIDTH, -TOR_OTHER_WFO, -TOR_OTHER_CZ_FIPS,
+-TOR_OTHER_CZ_NAME, -BEGIN_RANGE, -BEGIN_AZIMUTH, -BEGIN_LOCATION, -END_RANGE,	-END_AZIMUTH,
+-END_LOCATION, -EPISODE_NARRATIVE, -EVENT_NARRATIVE)
+```
 
+```{r 2011}
+StormEvents_2011 <- read_csv("../data/ignore/StormEvents_details-ftp_v1.0_d2011_c20250520.csv")
+StormEvents_2011 <- StormEvents_2011|>
+select (-EPISODE_ID, -CZ_TYPE, -CZ_FIPS, -CZ_NAME, -WFO, -BEGIN_DATE_TIME, -CZ_TIMEZONE,
+-END_DATE_TIME, -MAGNITUDE_TYPE, -TOR_LENGTH, -TOR_WIDTH, -TOR_OTHER_WFO, -TOR_OTHER_CZ_FIPS,
+-TOR_OTHER_CZ_NAME, -BEGIN_RANGE, -BEGIN_AZIMUTH, -BEGIN_LOCATION, -END_RANGE,	-END_AZIMUTH,
+-END_LOCATION, -EPISODE_NARRATIVE, -EVENT_NARRATIVE)
+```
+
+```{r 2012}
+StormEvents_2012 <- read_csv("../data/ignore/StormEvents_details-ftp_v1.0_d2012_c20250520.csv")
+StormEvents_2012 <- StormEvents_2012|>
+select (-EPISODE_ID, -CZ_TYPE, -CZ_FIPS, -CZ_NAME, -WFO, -BEGIN_DATE_TIME, -CZ_TIMEZONE,
+-END_DATE_TIME, -MAGNITUDE_TYPE, -TOR_LENGTH, -TOR_WIDTH, -TOR_OTHER_WFO, -TOR_OTHER_CZ_FIPS,
+-TOR_OTHER_CZ_NAME, -BEGIN_RANGE, -BEGIN_AZIMUTH, -BEGIN_LOCATION, -END_RANGE,	-END_AZIMUTH,
+-END_LOCATION, -EPISODE_NARRATIVE, -EVENT_NARRATIVE)
+```
+
+```{r 2013}
+StormEvents_2013 <- read_csv("../data/ignore/StormEvents_details-ftp_v1.0_d2013_c20250520.csv")
+StormEvents_2013 <- StormEvents_2013|>
+select (-EPISODE_ID, -CZ_TYPE, -CZ_FIPS, -CZ_NAME, -WFO, -BEGIN_DATE_TIME, -CZ_TIMEZONE,
+-END_DATE_TIME, -MAGNITUDE_TYPE, -TOR_LENGTH, -TOR_WIDTH, -TOR_OTHER_WFO, -TOR_OTHER_CZ_FIPS,
+-TOR_OTHER_CZ_NAME, -BEGIN_RANGE, -BEGIN_AZIMUTH, -BEGIN_LOCATION, -END_RANGE,	-END_AZIMUTH,
+-END_LOCATION, -EPISODE_NARRATIVE, -EVENT_NARRATIVE)
+```
+
+```{r 2014}
+StormEvents_2014 <- read_csv("../data/ignore/StormEvents_details-ftp_v1.0_d2014_c20250520.csv")
+StormEvents_2014 <- StormEvents_2014|>
+select (-EPISODE_ID, -CZ_TYPE, -CZ_FIPS, -CZ_NAME, -WFO, -BEGIN_DATE_TIME, -CZ_TIMEZONE,
+-END_DATE_TIME, -MAGNITUDE_TYPE, -TOR_LENGTH, -TOR_WIDTH, -TOR_OTHER_WFO, -TOR_OTHER_CZ_FIPS,
+-TOR_OTHER_CZ_NAME, -BEGIN_RANGE, -BEGIN_AZIMUTH, -BEGIN_LOCATION, -END_RANGE,	-END_AZIMUTH,
+-END_LOCATION, -EPISODE_NARRATIVE, -EVENT_NARRATIVE)
+```
+
+```{r 2015}
+StormEvents_2015 <- read_csv("../data/ignore/StormEvents_details-ftp_v1.0_d2015_c20250818.csv")
+StormEvents_2015 <- StormEvents_2015|>
+select (-EPISODE_ID, -CZ_TYPE, -CZ_FIPS, -CZ_NAME, -WFO, -BEGIN_DATE_TIME, -CZ_TIMEZONE,
+-END_DATE_TIME, -MAGNITUDE_TYPE, -TOR_LENGTH, -TOR_WIDTH, -TOR_OTHER_WFO, -TOR_OTHER_CZ_FIPS,
+-TOR_OTHER_CZ_NAME, -BEGIN_RANGE, -BEGIN_AZIMUTH, -BEGIN_LOCATION, -END_RANGE,	-END_AZIMUTH,
+-END_LOCATION, -EPISODE_NARRATIVE, -EVENT_NARRATIVE)
+```
+
+```{r 2016}
+StormEvents_2016 <- read_csv("../data/ignore/StormEvents_details-ftp_v1.0_d2016_c20250818.csv")
+StormEvents_2016 <- StormEvents_2016|>
+select (-EPISODE_ID, -CZ_TYPE, -CZ_FIPS, -CZ_NAME, -WFO, -BEGIN_DATE_TIME, -CZ_TIMEZONE,
+-END_DATE_TIME, -MAGNITUDE_TYPE, -TOR_LENGTH, -TOR_WIDTH, -TOR_OTHER_WFO, -TOR_OTHER_CZ_FIPS,
+-TOR_OTHER_CZ_NAME, -BEGIN_RANGE, -BEGIN_AZIMUTH, -BEGIN_LOCATION, -END_RANGE,	-END_AZIMUTH,
+-END_LOCATION, -EPISODE_NARRATIVE, -EVENT_NARRATIVE)
+```
+
+```{r 2017}
+StormEvents_2017 <- read_csv("../data/ignore/StormEvents_details-ftp_v1.0_d2017_c20250520.csv")
+StormEvents_2017 <- StormEvents_2017|>
+select (-EPISODE_ID, -CZ_TYPE, -CZ_FIPS, -CZ_NAME, -WFO, -BEGIN_DATE_TIME, -CZ_TIMEZONE,
+-END_DATE_TIME, -MAGNITUDE_TYPE, -TOR_LENGTH, -TOR_WIDTH, -TOR_OTHER_WFO, -TOR_OTHER_CZ_FIPS,
+-TOR_OTHER_CZ_NAME, -BEGIN_RANGE, -BEGIN_AZIMUTH, -BEGIN_LOCATION, -END_RANGE,	-END_AZIMUTH,
+-END_LOCATION, -EPISODE_NARRATIVE, -EVENT_NARRATIVE)
+```
+
+```{r 2018}
+StormEvents_2018 <- read_csv("../data/ignore/StormEvents_details-ftp_v1.0_d2018_c20250520.csv")
+StormEvents_2018 <- StormEvents_2018|>
+select (-EPISODE_ID, -CZ_TYPE, -CZ_FIPS, -CZ_NAME, -WFO, -BEGIN_DATE_TIME, -CZ_TIMEZONE,
+-END_DATE_TIME, -MAGNITUDE_TYPE, -TOR_LENGTH, -TOR_WIDTH, -TOR_OTHER_WFO, -TOR_OTHER_CZ_FIPS,
+-TOR_OTHER_CZ_NAME, -BEGIN_RANGE, -BEGIN_AZIMUTH, -BEGIN_LOCATION, -END_RANGE,	-END_AZIMUTH,
+-END_LOCATION, -EPISODE_NARRATIVE, -EVENT_NARRATIVE)
+```
+
+```{r 2019}
+StormEvents_2019 <- read_csv("../data/ignore/StormEvents_details-ftp_v1.0_d2019_c20250520.csv")
+StormEvents_2019 <- StormEvents_2019|>
+select (-EPISODE_ID, -CZ_TYPE, -CZ_FIPS, -CZ_NAME, -WFO, -BEGIN_DATE_TIME, -CZ_TIMEZONE,
+-END_DATE_TIME, -MAGNITUDE_TYPE, -TOR_LENGTH, -TOR_WIDTH, -TOR_OTHER_WFO, -TOR_OTHER_CZ_FIPS,
+-TOR_OTHER_CZ_NAME, -BEGIN_RANGE, -BEGIN_AZIMUTH, -BEGIN_LOCATION, -END_RANGE,	-END_AZIMUTH,
+-END_LOCATION, -EPISODE_NARRATIVE, -EVENT_NARRATIVE)
+```
+
+```{r 2020}
+StormEvents_2020 <- read_csv("../data/ignore/StormEvents_details-ftp_v1.0_d2020_c20250702.csv")
+StormEvents_2020 <- StormEvents_2020|>
+select (-EPISODE_ID, -CZ_TYPE, -CZ_FIPS, -CZ_NAME, -WFO, -BEGIN_DATE_TIME, -CZ_TIMEZONE,
+-END_DATE_TIME, -MAGNITUDE_TYPE, -TOR_LENGTH, -TOR_WIDTH, -TOR_OTHER_WFO, -TOR_OTHER_CZ_FIPS,
+-TOR_OTHER_CZ_NAME, -BEGIN_RANGE, -BEGIN_AZIMUTH, -BEGIN_LOCATION, -END_RANGE,	-END_AZIMUTH,
+-END_LOCATION, -EPISODE_NARRATIVE, -EVENT_NARRATIVE)
+```
+
+```{r 2021}
+StormEvents_2021 <- read_csv("../data/ignore/StormEvents_details-ftp_v1.0_d2021_c20250520.csv")
+StormEvents_2021 <- StormEvents_2021|>
+select (-EPISODE_ID, -CZ_TYPE, -CZ_FIPS, -CZ_NAME, -WFO, -BEGIN_DATE_TIME, -CZ_TIMEZONE,
+-END_DATE_TIME, -MAGNITUDE_TYPE, -TOR_LENGTH, -TOR_WIDTH, -TOR_OTHER_WFO, -TOR_OTHER_CZ_FIPS,
+-TOR_OTHER_CZ_NAME, -BEGIN_RANGE, -BEGIN_AZIMUTH, -BEGIN_LOCATION, -END_RANGE,	-END_AZIMUTH,
+-END_LOCATION, -EPISODE_NARRATIVE, -EVENT_NARRATIVE)
+```
+
+```{r 2022}
+StormEvents_2022 <- read_csv("../data/ignore/StormEvents_details-ftp_v1.0_d2022_c20250721.csv")
+StormEvents_2022 <- StormEvents_2022|>
+select (-EPISODE_ID, -CZ_TYPE, -CZ_FIPS, -CZ_NAME, -WFO, -BEGIN_DATE_TIME, -CZ_TIMEZONE,
+-END_DATE_TIME, -MAGNITUDE_TYPE, -TOR_LENGTH, -TOR_WIDTH, -TOR_OTHER_WFO, -TOR_OTHER_CZ_FIPS,
+-TOR_OTHER_CZ_NAME, -BEGIN_RANGE, -BEGIN_AZIMUTH, -BEGIN_LOCATION, -END_RANGE,	-END_AZIMUTH,
+-END_LOCATION, -EPISODE_NARRATIVE, -EVENT_NARRATIVE)
+```
+
+```{r 2023}
+StormEvents_2023 <- read_csv("../data/ignore/StormEvents_details-ftp_v1.0_d2023_c20250731.csv")
+StormEvents_2023 <- StormEvents_2023|>
+select (-EPISODE_ID, -CZ_TYPE, -CZ_FIPS, -CZ_NAME, -WFO, -BEGIN_DATE_TIME, -CZ_TIMEZONE,
+-END_DATE_TIME, -MAGNITUDE_TYPE, -TOR_LENGTH, -TOR_WIDTH, -TOR_OTHER_WFO, -TOR_OTHER_CZ_FIPS,
+-TOR_OTHER_CZ_NAME, -BEGIN_RANGE, -BEGIN_AZIMUTH, -BEGIN_LOCATION, -END_RANGE,	-END_AZIMUTH,
+-END_LOCATION, -EPISODE_NARRATIVE, -EVENT_NARRATIVE)
+```
+
+```{r 2024}
+StormEvents_2024 <- read_csv("../data/ignore/StormEvents_details-ftp_v1.0_d2024_c20250818.csv")
+StormEvents_2024 <- StormEvents_2024|>
+select (-EPISODE_ID, -CZ_TYPE, -CZ_FIPS, -CZ_NAME, -WFO, -BEGIN_DATE_TIME, -CZ_TIMEZONE,
+-END_DATE_TIME, -MAGNITUDE_TYPE, -TOR_LENGTH, -TOR_WIDTH, -TOR_OTHER_WFO, -TOR_OTHER_CZ_FIPS,
+-TOR_OTHER_CZ_NAME, -BEGIN_RANGE, -BEGIN_AZIMUTH, -BEGIN_LOCATION, -END_RANGE,	-END_AZIMUTH,
+-END_LOCATION, -EPISODE_NARRATIVE, -EVENT_NARRATIVE)
+```
 
 ```{r rbind}
 all_storms <- rbind(StormEvents_1950,
@@ -608,9 +741,43 @@ all_storms <- rbind(StormEvents_1950,
                     StormEvents_2006,
                     StormEvents_2007,
                     StormEvents_2008,
-                    StormEvents_2009)
+                    StormEvents_2009,
+                    StormEvents_2010,
+                    StormEvents_2011,
+                    StormEvents_2012,
+                    StormEvents_2013,
+                    StormEvents_2014,
+                    StormEvents_2015,
+                    StormEvents_2016,
+                    StormEvents_2017,
+                    StormEvents_2018,
+                    StormEvents_2019,
+                    StormEvents_2020)
 write_csv(all_storms, file="../data/ignore/all-storms.csv")
 ```
+
+```{r read_csv}
+all_storms <- read.csv("../data/ignore/all-storms.csv")
+```
+
+```{r remove-least_common}
+least_common <- all_storms|>
+  count(EVENT_TYPE)|>
+  arrange(n)
+
+#exclude  n < 1000
+all_storms <- all_storms|>
+  filter(!EVENT_TYPE %in% c("Volcanic Ashfall", "Tsunami", "Lakeshore Flood", "Dense Smoke",
+                             "Northern Lights", "Seiche", "Volcanic Ash", "Dust Devil", 
+                            "Astronomical Low Tide", "Freezing Fog", "Tropical Depression", 
+                            "Avalanche", "Dust Storm", "Sleet", "Debris Flow", "Rip Current" ,
+                            "Lake-Effect Snow", "Storm Surge/Tide", "Sneakerwave",""))
+
+all_storms|>
+  count(EVENT_TYPE)|>
+  arrange(n)
+```
+
 
 ```{r earliest}
 
